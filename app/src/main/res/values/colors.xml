@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="AppThem">#F25661</color>
+    <color name="primary">#F4ECEC</color>
+    <color name="pink">#F3CBD1</color>
+
 </resources>
