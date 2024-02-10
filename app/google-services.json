@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "393153517606",
+    "project_id": "foodzarella-app",
+    "storage_bucket": "foodzarella-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393153517606:android:1983f7c3e0e602bffe2ee7",
+        "android_client_info": {
+          "package_name": "com.example.foodzarella"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuynvESBkkrSFnkSEAef4F10AgIicmwPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

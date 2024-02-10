@@ -11,12 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodzarella.R;
 import com.example.foodzarella.slider.model.SliderModal;
 
 import java.util.ArrayList;
-
-import pl.droidsonroids.gif.GifImageView;
 
 public class SliderAdapter extends PagerAdapter {
 	private LayoutInflater layoutInflater;
@@ -43,15 +42,17 @@ public class SliderAdapter extends PagerAdapter {
 	public Object instantiateItem(@NonNull ViewGroup container, int position) {
 		layoutInflater = LayoutInflater.from(context);
 		View view = layoutInflater.inflate(R.layout.slider_layout, container, false);
-		GifImageView gifImageView = view.findViewById(R.id.idIV);
+		LottieAnimationView animationView = view.findViewById(R.id.animationView);
 		TextView titleTV = view.findViewById(R.id.idTVtitle);
 		TextView headingTV = view.findViewById(R.id.idTVheading);
 		RelativeLayout sliderRL = view.findViewById(R.id.idRLSlider);
 		SliderModal modal = sliderModalArrayList.get(position);
 		titleTV.setText(modal.getTitle());
 		headingTV.setText(modal.getHeading());
-		gifImageView.setImageResource(modal.getImageDrawableId());
+		animationView.setAnimation(modal.getAnimationFileName());
 		sliderRL.setBackgroundResource(modal.getBackgroundDrawable());
+		animationView.loop(true);
+		animationView.playAnimation();
 		container.addView(view);
 		return view;
 	}
