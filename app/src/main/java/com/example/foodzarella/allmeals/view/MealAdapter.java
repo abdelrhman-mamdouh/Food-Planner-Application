@@ -1,6 +1,7 @@
 package com.example.foodzarella.allmeals.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.foodzarella.R;
 import com.example.foodzarella.db.MealsLocalDataSource;
+import com.example.foodzarella.meal_details.MealDetailsActivity;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
 import com.example.foodzarella.network.MealsRemoteDataSource;
@@ -71,7 +73,9 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, mealList.get(position).getStrMeal(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, MealDetailsActivity.class);
+                intent.putExtra("ID_KEY", meal.getIdMeal());
+                context.startActivity(intent);
             }
         });
     }

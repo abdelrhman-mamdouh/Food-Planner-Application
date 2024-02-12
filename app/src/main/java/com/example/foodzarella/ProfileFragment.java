@@ -36,10 +36,6 @@ public class ProfileFragment extends Fragment {
                 .setOpenableLayout(binding.drawerLayout)
                 .build();
 
-        // Set up ActionBar with NavController
-        if (requireActivity() instanceof HomeActivity) {
-            ((HomeActivity) requireActivity()).setSupportActionBar(binding.myToolbar);
-        }
 
         NavigationUI.setupActionBarWithNavController((AppCompatActivity) requireActivity(), navController, mAppBarConfiguration);
 

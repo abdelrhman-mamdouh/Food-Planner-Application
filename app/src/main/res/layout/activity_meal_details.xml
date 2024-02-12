@@ -119,9 +119,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_Instructions" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerViewDetails"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -140,16 +140,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.96107054" />
-    <VideoView
+
+ <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/videoView"
-        android:layout_width="0dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" android:layout_marginTop="16dp"
+        app:autoPlay="true"
+        app:videoId="1WDesu7bUDM"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewDetails" />
 
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
-
-</androidx.constraintlayout.widget.ConstraintLayout><!--</android.support.v4.widget.NestedScrollView>-->
+</androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

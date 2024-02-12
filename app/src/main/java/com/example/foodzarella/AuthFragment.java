@@ -1,4 +1,6 @@
 package com.example.foodzarella;
+
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,14 +9,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,9 +34,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
 import java.util.Arrays;
 
 public class AuthFragment extends Fragment {
+
 
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
@@ -46,34 +54,40 @@ public class AuthFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initializeFirebase();
+        initializeViews(view);
+    }
 
+    private void initializeFirebase() {
         mAuth = FirebaseAuth.getInstance();
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
-
         callbackManager = CallbackManager.Factory.create();
+    }
 
+    private void initializeViews(View view) {
         Button btnLoginGoogle = view.findViewById(R.id.google_button);
         Button btnLoginFacebook = view.findViewById(R.id.facebook_button);
         Button btnSignUpEmail = view.findViewById(R.id.email_button);
         TextView tvLoginLink = view.findViewById(R.id.log_in);
 
-        btnSignUpEmail.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.signUp_fragment);
-        });
 
-        tvLoginLink.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_authFragment_to_logIn_frament);
-        });
-
+        btnSignUpEmail.setOnClickListener(v -> navigateToSignUpFragment());
+        tvLoginLink.setOnClickListener(v -> navigateToLoginFragment());
         btnLoginGoogle.setOnClickListener(v -> signInWithGoogle());
         btnLoginFacebook.setOnClickListener(v -> signInWithFacebook());
     }
 
+    private void navigateToSignUpFragment() {
+        Navigation.findNavController(requireView()).navigate(R.id.signUp_fragment);
+    }
+
+    private void navigateToLoginFragment() {
+        Navigation.findNavController(requireView()).navigate(R.id.action_authFragment_to_logIn_frament);
+    }
     private void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -85,16 +99,17 @@ public class AuthFragment extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                showToast("Facebook login done.");
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(getContext(), "Facebook login canceled.", Toast.LENGTH_SHORT).show();
+                showToast("Facebook login canceled.");
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getContext(), "Error during Facebook login: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                showToast("Error during Facebook login: " + error.getMessage());
             }
         });
     }
@@ -104,10 +119,9 @@ public class AuthFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(getContext(), "Facebook Authentication succeeded.", Toast.LENGTH_SHORT).show();
+                        showToast("Facebook Authentication succeeded.");
                     } else {
-                        Toast.makeText(getContext(), "Facebook Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        showToast("Facebook Authentication failed: " + task.getException().getMessage());
                     }
                 });
     }
@@ -115,17 +129,20 @@ public class AuthFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());
-            } catch (ApiException e) {
-                Toast.makeText(requireContext(), "Google sign-in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            handleGoogleSignInResult(data);
         } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void handleGoogleSignInResult(Intent data) {
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+        try {
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            firebaseAuthWithGoogle(account.getIdToken());
+        } catch (ApiException e) {
+            showToast("Google sign-in failed: " + e.getMessage());
         }
     }
 
@@ -134,11 +151,14 @@ public class AuthFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(requireContext(), "Google Authentication succeeded.", Toast.LENGTH_SHORT).show();
+                        showToast("Google Authentication succeeded.");
                     } else {
-                        Toast.makeText(requireContext(), "Google Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        showToast("Google Authentication failed: " + task.getException().getMessage());
                     }
                 });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
