@@ -1,3 +1,5 @@
+
+
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
@@ -67,6 +69,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:11.0.0'
     implementation platform('com.google.firebase:firebase-bom:32.7.2')
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
 
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'

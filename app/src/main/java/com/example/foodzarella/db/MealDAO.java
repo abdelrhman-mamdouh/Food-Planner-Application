@@ -27,4 +27,5 @@ public interface MealDAO {
 
     @Query("SELECT * FROM meal_table")
      LiveData<List<Meal>> getAllMeals();
+
 }

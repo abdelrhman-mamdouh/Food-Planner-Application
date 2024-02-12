@@ -13,7 +13,7 @@ import com.example.foodzarella.model.Meal;
 @Database(entities = {Meal.class}, version = 1)
 public abstract class MealDatabase extends RoomDatabase {
     private static MealDatabase instance=null;
-    public abstract MealDAO getProductDAO();
+    public abstract MealDAO getMealDAO();
     public static synchronized MealDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),

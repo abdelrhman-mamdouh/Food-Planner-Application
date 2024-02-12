@@ -23,7 +23,7 @@ import java.util.List;
 public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     private List<Meal> mealList;
     private final Context context;
-
+    boolean isFavorite;
     MealsLocalDataSource mealsLocalDataSource;
    MealsRemoteDataSource mealsRemoteDataSource;
     public MealAdapter(List<Meal> mealList, Context context, MealsLocalDataSource localDataSource, MealsRemoteDataSource remoteDataSource) {
@@ -31,33 +31,37 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         this.context = context;
         this.mealsLocalDataSource = localDataSource;
         this.mealsRemoteDataSource = remoteDataSource;
+        isFavorite=false;
     }
 
     @NonNull
     @Override
     public ViewHolderMeals onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_layout_all, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.meal_item, parent, false);
         return new ViewHolderMeals(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderMeals holder, int position) {
-        Meal currentProduct = mealList.get(position);
-        holder.titleTextView.setText(currentProduct.getTitle());
-        holder.priceTextView.setText(String.format("$%.2f", currentProduct.getPrice()));
-        holder.brandTextView.setText(currentProduct.getBrand());
-        holder.descriptionTextView.setText(currentProduct.getDescription());
-        holder.ratingBar.setRating((float) currentProduct.getRating());
+        Meal meal = mealList.get(position);
+        holder.titleTextView.setText(meal.getStrMeal());
+       // holder.ratingBar.setRating((float) meal.getRating());
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                            MealsRepositoryImol.getInstance(mealsRemoteDataSource, mealsLocalDataSource)
-                                    .insert(currentProduct);
+                if (isFavorite) {
+                    holder.add.setImageResource(R.drawable.ic_favorite_off);
+                } else {
+                    holder.add.setImageResource(R.drawable.ic_favorite_on);
+                }
+                isFavorite = !isFavorite;
+                MealsRepositoryImol.getInstance(mealsRemoteDataSource, mealsLocalDataSource)
+                                    .insert(meal);
                     Toast.makeText(context, "Meal added to favorites", Toast.LENGTH_SHORT).show();
 
             }
         });
-        String url = currentProduct.getThumbnail();
+        String url = meal.getStrMealThumb();
         Glide.with(context)
                 .load(url).apply(new RequestOptions().override(200,200))
                 .placeholder(R.drawable.ic_launcher_foreground)
@@ -67,7 +71,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, mealList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, mealList.get(position).getStrMeal(), Toast.LENGTH_SHORT).show();
             }
         });
     }

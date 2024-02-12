@@ -1,21 +1,22 @@
 package com.example.foodzarella.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "meals")
+@Entity(tableName = "meal_table")
 public class Meal {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "meal_id")
-    private int id;
-
     @ColumnInfo(name = "meal_name")
     private String strMeal;
 
     @ColumnInfo(name = "meal_image_url")
     private String strMealThumb;
 
+
+
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "meal_id")
     private String idMeal;
 
@@ -24,16 +25,7 @@ public class Meal {
         this.strMealThumb = strMealThumb;
         this.idMeal = idMeal;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getStrMeal() {
+ public String getStrMeal() {
         return strMeal;
     }
 

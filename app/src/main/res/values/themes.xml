@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.FoodZarella" parent="Base.Theme.FoodZarella" />
+
+    <style name="Theme.FoodZarella.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.FoodZarella.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.FoodZarella.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

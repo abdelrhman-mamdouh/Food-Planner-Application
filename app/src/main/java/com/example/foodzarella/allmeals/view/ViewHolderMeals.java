@@ -7,33 +7,27 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mvptask.R;
+import com.example.foodzarella.R;
 
 
 public class ViewHolderMeals extends RecyclerView.ViewHolder {
 
     ImageView imageView;
     TextView titleTextView;
-    TextView priceTextView;
-    TextView descriptionTextView;
-    TextView brandTextView;
     RatingBar ratingBar;
     CardView layout;
 
-    Button add;
+    AppCompatImageButton add;
 
     public ViewHolderMeals(@NonNull View itemView) {
         super(itemView);
-        imageView = itemView.findViewById(R.id.imageView);
-        titleTextView = itemView.findViewById(R.id.textView);
-        priceTextView = itemView.findViewById(R.id.textView2);
-        descriptionTextView = itemView.findViewById(R.id.textView3);
-        brandTextView = itemView.findViewById(R.id.textView4);
-        ratingBar = itemView.findViewById(R.id.ratingBar);
+        imageView = itemView.findViewById(R.id.iv_meal);
+        titleTextView = itemView.findViewById(R.id.tv_meal_name);
         layout = itemView.findViewById(R.id.cardView);
-        add = itemView.findViewById(R.id.btnAdd);
+        add = itemView.findViewById(R.id.favoriteButton);
     }
 }
