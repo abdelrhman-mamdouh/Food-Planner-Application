@@ -1,7 +1,7 @@
 package com.example.foodzarella.meal_details;
 
-import com.example.foodzarella.network.MealApiService;
-import com.example.foodzarella.network.MealDetailsResponse;
+import com.example.foodzarella.network.meal_details.MealApiService;
+import com.example.foodzarella.network.meal_details.MealDetailsResponse;
 
 import java.util.List;
 

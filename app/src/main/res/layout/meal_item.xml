@@ -4,13 +4,17 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardView"
         android:layout_width="match_parent"
+        android:layout_margin="30dp"
         android:layout_height="wrap_content"
-        android:layout_margin="40dp"
+       android:layout_centerHorizontal="true"
+    android:layout_gravity="center_horizontal"
+
         app:cardElevation="50dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+
             android:orientation="vertical">
             <ImageView
                 android:id="@+id/iv_meal"
@@ -30,18 +34,7 @@
                 android:text="Meal"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
-        <!--    <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:numStars="5"
-                android:progressTint="@color/yellow"
-                android:rating="0"
-                android:scaleX="0.75"
-                android:scaleY="0.75"
-                android:stepSize="1" />
--->
+
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/favoriteButton"
                 android:layout_width="wrap_content"

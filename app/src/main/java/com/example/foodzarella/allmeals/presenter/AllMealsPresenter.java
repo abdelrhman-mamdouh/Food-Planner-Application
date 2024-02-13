@@ -5,5 +5,6 @@ import com.example.foodzarella.model.Meal;
 
 public interface AllMealsPresenter {
     public void getMeals();
+    public void getMealsByCategory();
     public void addToFav(Meal meal);
 }

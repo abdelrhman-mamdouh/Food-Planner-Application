@@ -1,23 +1,22 @@
 package com.example.foodzarella.meal_details;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodzarella.R;
 import com.example.foodzarella.network.ApiClient;
-import com.example.foodzarella.network.MealApiService;
+import com.example.foodzarella.network.meal_details.MealApiService;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
@@ -76,14 +75,12 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         Glide.with(this).load(mealDetails.getStrMealThumb()).into(imageViewHero);
 
-        VideoAdapter videoAdapter=new VideoAdapter(youTubePlayerView);
         String videoUrl = mealDetails.getStrYoutube();
-        if (videoUrl != null && !videoUrl.isEmpty()) {
-             videoAdapter = new VideoAdapter(youTubePlayerView);
-            videoAdapter.initializeWithUrl(getVideoIdFromUrl(videoUrl));
-        } else {
-            Toast.makeText(getApplicationContext(), "No video available", Toast.LENGTH_SHORT).show();
-        }
+        String videoId = getVideoIdFromUrl(videoUrl); // Parse video ID from URL
+
+        initializeYouTubePlayer(videoId); // Initialize YouTube player with the video ID
+
+        MealDetailsAdapter adapter = new MealDetailsAdapter(getApplicationContext(), addIngredientsList(mealDetails), addMeasuresList(mealDetails));
 
 
         Toast.makeText(getApplicationContext(),getVideoIdFromUrl(videoUrl)+"",Toast.LENGTH_SHORT).show();
@@ -91,7 +88,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         Toast.makeText(getApplicationContext(), addIngredientsList(mealDetails)+"",Toast.LENGTH_SHORT).show();
 
-        MealDetailsAdapter adapter = new MealDetailsAdapter(getApplicationContext(), addIngredientsList(mealDetails), addMeasuresList(mealDetails));
+         adapter = new MealDetailsAdapter(getApplicationContext(), addIngredientsList(mealDetails), addMeasuresList(mealDetails));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (adapter != null) {
@@ -153,6 +150,17 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         measuresList.add(mealDetails.getStrMeasure20());
         return measuresList;
     }
+    private void initializeYouTubePlayer(String videoId) {
+        youTubePlayerView.setEnableAutomaticInitialization(false); // Disable automatic initialization
+        youTubePlayerView.initialize(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                super.onReady(youTubePlayer);
+                youTubePlayer.loadVideo(videoId, 0);
+            }
+        });
+    }
+
     private String getVideoIdFromUrl(String videoUrl) {
         return videoUrl.substring(videoUrl.lastIndexOf("=") + 1);
     }

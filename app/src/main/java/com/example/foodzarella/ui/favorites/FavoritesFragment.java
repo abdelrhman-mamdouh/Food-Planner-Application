@@ -5,19 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.foodzarella.databinding.FragmentFavoritesBinding;
-import com.example.foodzarella.databinding.FragmentHomeBinding;
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.db.MealsLocalDataSourceImpl;
 import com.example.foodzarella.favmeals.presenter.FavPresenterImpl;
@@ -25,8 +21,8 @@ import com.example.foodzarella.favmeals.view.FacMealView;
 import com.example.foodzarella.favmeals.view.FavAdapter;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
-import com.example.foodzarella.network.MealsRemoteDataSource;
-import com.example.foodzarella.network.MealsRemoteSourceDataImpl;
+import com.example.foodzarella.network.get_meals.MealsRemoteDataSource;
+import com.example.foodzarella.network.get_meals.MealsRemoteSourceDataImpl;
 
 import java.util.List;
 

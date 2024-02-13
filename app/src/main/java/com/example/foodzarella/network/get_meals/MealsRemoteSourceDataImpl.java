@@ -1,4 +1,4 @@
-package com.example.foodzarella.network;
+package com.example.foodzarella.network.get_meals;
 
 import android.util.Log;
 
@@ -33,11 +33,10 @@ public class MealsRemoteSourceDataImpl implements MealsRemoteDataSource {
     }
 
     @Override
-    public void makeNetworkCall(NetworkCallback networkCallback) {
+    public void makeNetworkCall(NetworkCallback networkCallback,String category) {
         MealQuery mealService = retrofit.create(MealQuery.class);
-        Call<MealResponse> call = mealService.getMeals("chicken_breast");
-
-
+        Call<MealResponse> call = mealService.getMeals(category);
+        Call<MealResponse> call2 = mealService.getMealsByCategory(category);
         call.enqueue(new Callback<MealResponse>() {
             @Override
             public void onResponse(@NonNull Call<MealResponse> call, @NonNull Response<MealResponse> response) {
@@ -54,5 +53,6 @@ public class MealsRemoteSourceDataImpl implements MealsRemoteDataSource {
                 throwable.printStackTrace();
             }
         });
+
     }
 }

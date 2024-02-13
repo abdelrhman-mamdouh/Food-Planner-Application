@@ -15,11 +15,11 @@
     <string name="login_welcome">Welcome back! you\'re just a tap away from somthing delicious</string>
     <string name="todo">TODO</string>
     <string name="logIn">Log In</string>
-    <string name="default_web_client_id">YOUR_DEFAULT_WEB_CLIENT_ID</string>
+    <string name="default_web_client_id">123.apps.googleusercontent.com</string>
     <string name="sigUp_intro">Save delicious meals and get personalized content</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Search</string>
+    <string name="title_search">Search</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_favorite">Favorites</string>
     <string name="title_activity_profile">profile</string>
@@ -44,6 +44,11 @@
     <string name="facebook_app_id">1234</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">56789</string>
+    <string name="category_name">Category name</string>
+    <string name="description">Description</string>
+    <string name="daily_inspiration">Daily Inspiration</string>
+    <string name="categories">Categories</string>
+    <string name="country">Country</string>
 
 
 </resources>

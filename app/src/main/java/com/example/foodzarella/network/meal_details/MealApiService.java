@@ -1,10 +1,9 @@
-package com.example.foodzarella.network;
+package com.example.foodzarella.network.meal_details;
 
-import com.example.foodzarella.meal_details.MealDetails;
+import com.example.foodzarella.network.meal_details.MealDetailsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 

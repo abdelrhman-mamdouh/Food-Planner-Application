@@ -19,7 +19,6 @@ public class VideoAdapter {
     public void initializeWithUrl(String videoUrl) {
         if (videoUrl != null && !videoUrl.isEmpty()) {
             String videoId = getVideoIdFromUrl(videoUrl);
-
             initializeYouTubePlayer(videoId);
         }
     }

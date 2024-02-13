@@ -1,4 +1,4 @@
-package com.example.foodzarella.network;
+package com.example.foodzarella.network.get_meals;
 
 
 import com.example.foodzarella.model.Meal;

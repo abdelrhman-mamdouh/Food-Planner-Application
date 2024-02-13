@@ -12,7 +12,20 @@
           "package_name": "com.example.foodzarella"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "393153517606-ka1f2rbueeantkngr3e297o9lc6fjdhm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.foodzarella",
+            "certificate_hash": "1ef700613c9cf7210e3463f8e15460ebfba7ffb4"
+          }
+        },
+        {
+          "client_id": "393153517606-ngi5cvkok0pum7loilnaud8d8c6pdmq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBuynvESBkkrSFnkSEAef4F10AgIicmwPQ"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393153517606-ngi5cvkok0pum7loilnaud8d8c6pdmq5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

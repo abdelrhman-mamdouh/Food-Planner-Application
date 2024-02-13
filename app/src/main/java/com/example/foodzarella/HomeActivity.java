@@ -34,13 +34,14 @@ public class HomeActivity extends AppCompatActivity {
 
         // Configure the AppBarConfiguration with the IDs of the top-level destinations
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_favorites)
+                R.id.navigation_home, R.id.navigation_search, R.id.navigation_favorites)
                 .setDrawerLayout(drawerLayout) // Add this line if you are using a drawer layout
                 .build();
 
         // Set up the navigation graph with the NavController
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_home);
         NavigationUI.setupWithNavController(navView, navController);
+
 
         // Set up the navigation icon click listener to open the drawer
         binding.myToolbar.setNavigationOnClickListener(new View.OnClickListener() {

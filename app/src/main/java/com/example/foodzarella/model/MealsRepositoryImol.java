@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 
 
 import com.example.foodzarella.db.MealsLocalDataSource;
-import com.example.foodzarella.network.MealsRemoteDataSource;
-import com.example.foodzarella.network.NetworkCallback;
+import com.example.foodzarella.network.get_meals.MealsRemoteDataSource;
+import com.example.foodzarella.network.get_meals.NetworkCallback;
 
 import java.util.List;
 
@@ -32,8 +32,8 @@ public class MealsRepositoryImol implements MealsRepository {
     }
 
     @Override
-    public void getAllMeals(NetworkCallback networkCallback) {
-        mealsRemoteDataSource.makeNetworkCall(networkCallback);
+    public void getAllMeals(NetworkCallback networkCallback,String category) {
+        mealsRemoteDataSource.makeNetworkCall(networkCallback,category);
     }
 
     @Override

@@ -15,7 +15,7 @@ import com.example.foodzarella.R;
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
-import com.example.foodzarella.network.MealsRemoteDataSource;
+import com.example.foodzarella.network.get_meals.MealsRemoteDataSource;
 
 import java.util.List;
 

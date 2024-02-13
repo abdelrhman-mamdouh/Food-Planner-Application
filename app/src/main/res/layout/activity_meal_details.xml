@@ -145,7 +145,6 @@
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="200dp" android:layout_marginTop="16dp"
-        app:autoPlay="true"
         app:videoId="1WDesu7bUDM"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
