@@ -1,31 +1,78 @@
 package com.example.foodzarella.allmeals.presenter;
 
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.foodzarella.allmeals.view.AllMealView;
+import com.example.foodzarella.categorys.model.Category;
 import com.example.foodzarella.model.Meal;
+import com.example.foodzarella.model.MealResponse;
 import com.example.foodzarella.model.MealsRepository;
+import com.example.foodzarella.network.ApiClient;
+import com.example.foodzarella.network.get_meals.MealQuery;
 import com.example.foodzarella.network.get_meals.NetworkCallback;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AllMealsPresenterImpl implements AllMealsPresenter, NetworkCallback {
     private AllMealView view;
     private MealsRepository repo;
 
-    private String category;
-public AllMealsPresenterImpl(AllMealView view, MealsRepository repo,String category){
+    private String searchBy;
+public AllMealsPresenterImpl(AllMealView view, MealsRepository repo,String searchBy){
     this.view=view;
     this.repo=repo;
-    this.category=category;
+    this.searchBy =searchBy;
 }
     @Override
     public void getMeals() {
-    repo.getAllMeals(this,category);
+
+        Call<MealResponse> call =ApiClient.getClient().create(MealQuery.class).getMeals("chicken_breast");
+        call.enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MealResponse> call, @NonNull Response<MealResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Meal> mealList = response.body().getMeals();
+                    view.showData(mealList);
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<MealResponse> call, @NonNull Throwable throwable) {
+                view.showErrMsg("Failed to fetch meals");
+            }
+        });
     }
 
     @Override
     public void getMealsByCategory() {
-        repo.getAllMeals(this,category);
+        Call<MealResponse> callCategory = ApiClient.getClient().create(MealQuery.class).getMealsByCategory(searchBy);
+        callCategory.enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Meal> mealList = response.body().getMeals();
+                    view.showData(mealList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealResponse> call, Throwable throwable) {
+                view.showErrMsg("Failed to fetch categories");
+            }
+        });
+    }
+
+    @Override
+    public void getMealsByCountry() {
+        repo.getAllMeals(this,searchBy);
     }
 
     @Override

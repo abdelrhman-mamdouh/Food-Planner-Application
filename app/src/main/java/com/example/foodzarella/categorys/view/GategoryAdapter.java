@@ -51,7 +51,6 @@ public class GategoryAdapter extends RecyclerView.Adapter<GategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Category item = categoryItems.get(position);
         holder.categoryNameTextView.setText(item.getStrCategory());
-       // holder.descriptionTextView.setText(item.getStrCategoryDescription());
         String url = item.getStrCategoryThumb();
         Glide.with(context)
                 .load(url).apply(new RequestOptions().override(200,200))
@@ -67,7 +66,6 @@ public class GategoryAdapter extends RecyclerView.Adapter<GategoryAdapter.ViewHo
                 NavController navController = NavHostFragment.findNavController(fragment);
                 navController.popBackStack(); // Close the current fragment
                 navController.navigate(R.id.navigation_search, bundle);
-
             }
         });
     }

@@ -51,7 +51,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
                 Bundle bundle = new Bundle();
                 bundle.putString("countryName", countryName);
                 NavController navController = NavHostFragment.findNavController(fragment);
-                navController.popBackStack(); // Close the current fragment
+                navController.popBackStack();
                 navController.navigate(R.id.navigation_search, bundle);
 
             }

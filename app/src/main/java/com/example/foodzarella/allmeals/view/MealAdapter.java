@@ -47,7 +47,6 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     public void onBindViewHolder(@NonNull ViewHolderMeals holder, int position) {
         Meal meal = mealList.get(position);
         holder.titleTextView.setText(meal.getStrMeal());
-       // holder.ratingBar.setRating((float) meal.getRating());
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +64,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         });
         String url = meal.getStrMealThumb();
         Glide.with(context)
-                .load(url).apply(new RequestOptions().override(200,200))
+                .load(url).apply(new RequestOptions().override(150,150))
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.imageView);
@@ -82,9 +81,8 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
 
     @Override
     public int getItemCount() {
-        return mealList != null ? mealList.size() : 0;
+        return mealList != null ?mealList.size() : 0;
     }
-
     public void setList(List<Meal> updatedProducts){
         this.mealList =updatedProducts;
     }

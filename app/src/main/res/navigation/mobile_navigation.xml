@@ -23,8 +23,13 @@
         android:label="@string/title_favorite"
         tools:layout="@layout/fragment_favorites" />
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.foodzarella.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.foodzarella.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/logOutFragment"
+        android:name="com.example.foodzarella.LogOutFragment"
+        android:label="fragment_log_out"
+        tools:layout="@layout/fragment_log_out" />
 </navigation>
