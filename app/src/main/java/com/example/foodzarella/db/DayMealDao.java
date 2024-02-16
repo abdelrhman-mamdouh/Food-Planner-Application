@@ -24,6 +24,6 @@ public interface DayMealDao {
     void delete(DayMeal meal);
     @Query("SELECT * FROM day_meal_table")
     LiveData<List<DayMeal>> getAllDayMeals();
-    @Query("SELECT EXISTS (SELECT 1 FROM day_meal_table WHERE meal_id = :mealId)")
-    LiveData<Boolean> isMealExists(String mealId);
+    @Query("SELECT * FROM day_meal_table WHERE meal_date = :date")
+    LiveData<List<DayMeal>> getDayMealListByDate(String date);
 }

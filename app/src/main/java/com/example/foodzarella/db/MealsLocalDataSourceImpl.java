@@ -40,6 +40,12 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource {
     }
 
     @Override
+    public LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate) {
+        return dayMealDao.getDayMealListByDate(selectedDate);
+        }
+
+
+    @Override
     public LiveData<List<DayMeal>> getDayMealList() {
         return dayMealsList;
     }

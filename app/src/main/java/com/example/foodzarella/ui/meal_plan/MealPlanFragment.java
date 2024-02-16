@@ -28,10 +28,7 @@ import com.example.foodzarella.day_meal.view.DayMealAdapter;
 import com.example.foodzarella.day_meal.view.DayMealView;
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.db.MealsLocalDataSourceImpl;
-import com.example.foodzarella.favmeals.presenter.FavPresenterImpl;
-import com.example.foodzarella.favmeals.view.FavAdapter;
 import com.example.foodzarella.model.DayMeal;
-import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
 import com.example.foodzarella.network.get_meals.MealsRemoteDataSource;
 import com.example.foodzarella.network.get_meals.MealsRemoteSourceDataImpl;
@@ -128,13 +125,27 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
     @Override
     public void onResume() {
         super.onResume();
-        setEventAdapter();
+       setEventAdapter();
     }
 
     private void setEventAdapter() {
         ArrayList<Event> dailyEvents = Event.eventsForDate(CalendarUtils.selectedDate);
         EventAdapter eventAdapter = new EventAdapter(getContext(), dailyEvents);
         eventRecyclerView.setAdapter(eventAdapter);
+        eventRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        eventRecyclerView.setLayoutManager(linearLayoutManager);
+
+        localDataSource = MealsLocalDataSourceImpl.getInstance(requireContext());
+        remoteDataSource = MealsRemoteSourceDataImpl.getInstance();
+        CalendarUtils.formattedDate(CalendarUtils.selectedDate);
+        dayMealAdapter = new DayMealAdapter(null, requireContext(), localDataSource, remoteDataSource);
+        eventRecyclerView.setAdapter(dayMealAdapter);
+
+        DayMealsPresenter dayMealsPresenter = new DayPresenterImpl(this, MealsRepositoryImol.getInstance(remoteDataSource, localDataSource));
+        showData(dayMealsPresenter.getMealsByDate(CalendarUtils.formattedDate(CalendarUtils.selectedDate)));
+
     }
 
     public void newEventAction(View view) {
@@ -164,19 +175,7 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        eventRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        eventRecyclerView.setLayoutManager(linearLayoutManager);
 
-        localDataSource = MealsLocalDataSourceImpl.getInstance(requireContext());
-        remoteDataSource = MealsRemoteSourceDataImpl.getInstance();
-
-        dayMealAdapter = new DayMealAdapter(null, requireContext(), localDataSource, remoteDataSource);
-        eventRecyclerView.setAdapter(dayMealAdapter);
-
-        DayMealsPresenter dayMealsPresenter = new DayPresenterImpl(this, MealsRepositoryImol.getInstance(remoteDataSource, localDataSource));
-        showData(dayMealsPresenter.getMeals());
 
     }
 }

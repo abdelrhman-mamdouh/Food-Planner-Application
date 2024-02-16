@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface MealsLocalDataSource {
     LiveData<List<Meal>> getMealList();
+
+    LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate);
     LiveData<List<DayMeal>> getDayMealList();
 
     void delete(Meal meal);

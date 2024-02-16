@@ -69,26 +69,43 @@ public class SearchFragment extends Fragment implements AllMealView {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Bundle arguments = getArguments();
+        if (arguments != null && arguments.containsKey("categoryName")) {
+            String categoryName = arguments.getString("categoryName");
+            showLoader();
+                chipGroup.check(R.id.chipCategory);
+                searchMealsByCategory(categoryName);
+                 autoCompleteTxt.setText(categoryName);
+            autoCompleteTxt.setCompletionHint(categoryName);
+        }
+        if (arguments != null && arguments.containsKey("countryName")) {
+            String countryName = arguments.getString("countryName");
+            showLoader();
+            chipGroup.check(R.id.chipCountry);
+            searchMealsByCountry(countryName);
+            autoCompleteTxt.setText(countryName);
+            autoCompleteTxt.setCompletionHint(countryName);
+        }
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
                 selectedChip = view.findViewById(checkedId);
-                switch (selectedChip.getText().toString()) {
-                    case "Country":
-                        changeFilter("Country", "Select Country", countries);
-                        break;
-                    case "Ingredient":
-                        changeFilter("Ingredient", "Select Ingredient", countries);
-                        break;
-                    case "Category":
-                        changeFilter("Category", "Select Category", categories);
-                        break;
+                if (selectedChip != null && selectedChip.getText() != null) {
+                    switch (selectedChip.getText().toString()) {
+                        case "Country":
+                            changeFilter("Country", "Select Country", countries);
+                            break;
+                        case "Ingredient":
+                            changeFilter("Ingredient", "Select Ingredient", countries);
+                            break;
+                        case "Category":
+                            changeFilter("Category", "Select Category", categories);
+                            break;
+                    }
                 }
             }
         });
 
-        chipGroup.check(R.id.chipCategory);
         autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -108,6 +125,7 @@ public class SearchFragment extends Fragment implements AllMealView {
     private void changeFilter(String filterName, String selectName, String[] listNames) {
         textViewFilerName.setText(filterName);
         autoCompleteTxt.setText(selectName);
+        autoCompleteTxt.setCompletionHint(selectName);
         adapterItems = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listNames);
         autoCompleteTxt.setAdapter(adapterItems);
     }

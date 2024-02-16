@@ -3,9 +3,11 @@ package com.example.foodzarella.ui.meal_plan;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
+
 public class Event
 {
-    public static ArrayList<Event> eventsList = new ArrayList<>();
+    public static List<Event> eventsList = new ArrayList<>();
     public static ArrayList<Event> eventsForDate(LocalDate date)
     {
         ArrayList<Event> events = new ArrayList<>();

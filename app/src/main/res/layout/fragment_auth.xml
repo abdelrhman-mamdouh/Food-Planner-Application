@@ -48,11 +48,15 @@
             app:layout_constraintStart_toStartOf="parent">
 
         </View>
+
         <ImageView
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="116dp"
-            android:background="@drawable/wave" />
+            android:background="@drawable/wave"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/google_button"
             style="@style/ButtonTextStyle"

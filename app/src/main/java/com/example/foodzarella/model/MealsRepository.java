@@ -12,6 +12,8 @@ public interface MealsRepository {
     public LiveData<List<Meal>> getMealList() ;
 
     public LiveData<List<DayMeal>> getDayMealList() ;
+
+    public LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate) ;
     void getAllMeals(NetworkCallback networkCallback,String category);
 
     void delete(Meal product);

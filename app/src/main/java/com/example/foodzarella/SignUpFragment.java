@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +26,6 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sign_up_fragment, container, false);
-
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -72,13 +72,13 @@ public class SignUpFragment extends Fragment {
                         String userId = user.getUid();
                         User newUser = new User(userId, name, email);
                         mDatabase.child("users").child(userId).setValue(newUser);
+                        Navigation.findNavController(requireView()).navigate(R.id.logIn_frament);
                     }
                 } else {
-                    Toast.makeText(getContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(requireView()).navigate(R.id.logIn_frament);
                 }
             });
         });
-
         return view;
     }
 }

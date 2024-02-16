@@ -46,7 +46,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     boolean isFavorite;
     MealsLocalDataSource mealsLocalDataSource;
     MealsRemoteDataSource mealsRemoteDataSource;
-
+    private boolean isExpanded = false;
     public MealAdapter(List<Meal> mealList, Context context, MealsLocalDataSource localDataSource, MealsRemoteDataSource remoteDataSource) {
         this.mealList = mealList;
         this.context = context;
@@ -55,6 +55,11 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         isFavorite = false;
     }
 
+
+    public void showAllItems() {
+        isExpanded = true;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public ViewHolderMeals onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -98,7 +103,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         holder.MealPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DayMeal dayMeal= new DayMeal(meal.getStrMeal(),meal.getStrMealThumb(),meal.getIdMeal());
+                DayMeal dayMeal= new DayMeal(meal.getStrMeal(),meal.getStrMealThumb(),meal.getIdMeal(),"");
                 Gson gson = new Gson();
                 String mealJson = gson.toJson(dayMeal);
                 SharedPreferences sharedPreferences = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);

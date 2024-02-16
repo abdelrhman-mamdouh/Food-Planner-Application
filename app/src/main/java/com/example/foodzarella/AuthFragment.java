@@ -1,8 +1,11 @@
 package com.example.foodzarella;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +48,7 @@ public class AuthFragment extends Fragment {
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager callbackManager;
     private Button btnLoginFacebook;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +58,7 @@ public class AuthFragment extends Fragment {
         btnLoginFacebook = view.findViewById(R.id.facebook_button);
         btnLoginFacebook.setOnClickListener(v -> signInWithFacebook());
         initializeFirebase();
+        sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
         return view;
     }
 
@@ -66,14 +72,15 @@ public class AuthFragment extends Fragment {
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
 
         FacebookSdk.sdkInitialize(requireContext());
-        AppEventsLogger.activateApp(requireActivity().getApplication());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeViews(view);
+
     }
+
 
     private void initializeViews(View view) {
         Button btnLoginGoogle = view.findViewById(R.id.google_button);
@@ -87,6 +94,7 @@ public class AuthFragment extends Fragment {
 
     private void navigateToSignUpFragment() {
         Navigation.findNavController(requireView()).navigate(R.id.signUp_fragment);
+
     }
 
     private void navigateToLoginFragment() {
@@ -104,13 +112,16 @@ public class AuthFragment extends Fragment {
 
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        update(user);
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            saveUserData(user.getDisplayName(), user.getEmail(), user.getPhotoUrl());
+                            updateUI(user);
+                        }
                     } else {
+                        // If sign in fails, display a message to the user.
                         Toast.makeText(getContext(), "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                         updateUI(null);
@@ -132,43 +143,47 @@ public class AuthFragment extends Fragment {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            showToast("Google Authentication succeeded.");
-            updateUI(account);
+            FirebaseGoogleAuth(account);
         } catch (ApiException e) {
-            showToast("signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(getContext(), "signInResult:failed code=" + e.getStatusCode(), Toast.LENGTH_SHORT).show();
             updateUI(null);
         }
     }
 
-    private void updateUI(GoogleSignInAccount account) {
-        if (account != null) {
-            String name = account.getDisplayName();
-            String email = account.getEmail();
-            String idToken = account.getIdToken();
-            Toast.makeText(getContext(), name + " " + email + " " + idToken, Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void update(@Nullable FirebaseUser user) {
-        if (user != null) {
-            // User is signed in, you can update UI with user information
-            String displayName = user.getDisplayName();
-            String email = user.getEmail();
-            Uri uri = user.getPhotoUrl();
-            showToast(displayName+" "+email+" "+uri);
-            // Update your UI elements with the user's information
-            // For example:
-            // displayNameTextView.setText(displayName);
-            // emailTextView.setText(email);
-            // Glide.with(this).load(photoUrl).into(profileImageView);
+    private void FirebaseGoogleAuth(GoogleSignInAccount acct) {
+        AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(authCredential)
+                .addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            saveUserData(user.getDisplayName(), user.getEmail(), user.getPhotoUrl());
+                            updateUI(user);
+                        }
+                    } else {
 
-            // Example: navigate to another fragment upon successful login
-         //   Navigation.findNavController(requireView()).navigate(R.id.logged_in_fragment);
-        } else {
-            // User is signed out, update UI accordingly
-            // For example:
-            // displayNameTextView.setText("");
-            // emailTextView.setText("");
-            // profileImageView.setImageResource(R.drawable.default_profile_image);
+                        Toast.makeText(getContext(), "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                });
+    }
+
+    private void saveUserData(String displayName, String email, Uri photoUri) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("displayName", displayName);
+        editor.putString("authMethod", "Google");
+        editor.putString("email", email);
+        editor.putString("photoUri", photoUri != null ? photoUri.toString() : null);
+        editor.apply();
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            FirebaseAuth auth= FirebaseAuth.getInstance();
+            Intent intent = new Intent(requireContext(), HomeActivity.class);
+            startActivity(intent);
+            requireActivity().finish();
         }
     }
 

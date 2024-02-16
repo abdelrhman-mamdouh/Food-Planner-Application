@@ -9,6 +9,7 @@
     tools:context=".slider.view.IntroSliderActivity">
 
     <!--view pager for displaying our slides-->
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/idViewPager"
         android:layout_width="match_parent"
@@ -16,39 +17,38 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
-        android:weightSum="5">
+        android:weightSum="6">
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="3" />
 
         <LinearLayout
             android:id="@+id/idLLDots"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="center_horizontal"
             android:orientation="horizontal" />
-
         <Button
             android:id="@+id/idBtnSkip"
-            android:layout_width="0dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="2"
+            android:layout_marginLeft="20dp"
+            android:paddingLeft="20dp"
 
+            android:layout_weight="1"
             android:backgroundTint="@color/AppThem"
             android:fontFamily="@font/muli_black"
             android:text="Skip"
             android:textAllCaps="false"
             android:textColor="@color/white" />
-
     </LinearLayout>
-
 </RelativeLayout>

@@ -19,12 +19,11 @@ public class SliderPresenter implements SliderContract.Presenter {
     @Override
     public void loadSliderData() {
         ArrayList<SliderModal> sliderModalArrayList = new ArrayList<>();
-        sliderModalArrayList.add(new SliderModal("What will I eat today?", "Never stress about meal planning again!", "think_animation.json", R.drawable.gradient_one));
+        sliderModalArrayList.add(new SliderModal("What will I eat today?", "Never stress about meal planning again!", "think_animation.json", R.drawable.gradient_three));
         sliderModalArrayList.add(new SliderModal("FoodZarella", "Just view categories, suggesting meals, and searching for a specific meal using many options", "foods_animation.json", R.drawable.gradient_two));
-        sliderModalArrayList.add(new SliderModal("App Features", "Plan your weekly meals with ease, FoodZarella also offers a personalized favorite list feature", "mobile_animation.json", R.drawable.gradient_three));
+        sliderModalArrayList.add(new SliderModal("App Features", "Plan your weekly meals with ease, FoodZarella also offers a personalized favorite list feature", "mobile_animation.json", R.drawable.wave2));
         view.showSlider(sliderModalArrayList);
     }
-
     @Override
     public void onSkipClicked() {
         view.navigateToMain();

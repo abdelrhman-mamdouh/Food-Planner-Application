@@ -3,6 +3,7 @@ package com.example.foodzarella.slider.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -34,23 +35,42 @@ public class IntroSliderActivity extends AppCompatActivity implements SliderCont
 
         SharedPreferences preferences = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
         String firstTime = preferences.getString("FirstInstall", "");
-        if (firstTime.equals("Yes")) {
+        if (firstTime.equals("no")) {
             navigateToMain();
         } else {
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("FirstInstall", "Yes");
+            editor.putString("FirstInstall", "no");
             editor.apply();
         }
 
-
         viewPager = findViewById(R.id.idViewPager);
         dotsLL = findViewById(R.id.idLLDots);
-
-
         presenter = new SliderPresenter(this);
         presenter.loadSliderData();
-
         skip = findViewById(R.id.idBtnSkip);
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                for (int i = 0; i < dots.length; i++) {
+                    if (i == position) {
+                        dots[i].setTextColor(getResources().getColor(R.color.AppThem));
+                    } else {
+                        dots[i].setTextColor(getResources().getColor(R.color.black));
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,8 +78,6 @@ public class IntroSliderActivity extends AppCompatActivity implements SliderCont
             }
         });
     }
-
-
     @Override
     public void showSlider(ArrayList<SliderModal> sliders) {
         SliderAdapter adapter = new SliderAdapter(this, sliders);
@@ -77,11 +95,13 @@ public class IntroSliderActivity extends AppCompatActivity implements SliderCont
     private void addDots(int size, int pos) {
         dots = new TextView[size];
         dotsLL.removeAllViews();
+        dotsLL.setGravity(Gravity.CENTER_HORIZONTAL);
         for (int i = 0; i < size; i++) {
             dots[i] = new TextView(this);
-            dots[i].setText(".");
-            dots[i].setTextSize(90);
-            dots[i].setTextColor(getResources().getColor(R.color.white));
+            dots[i].setText("●");
+            dots[i].setTextSize(30);
+
+            dots[i].setTextColor(getResources().getColor(R.color.AppThem));
             dotsLL.addView(dots[i]);
         }
         if (dots.length > 0) {

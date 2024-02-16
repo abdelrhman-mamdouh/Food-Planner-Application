@@ -49,6 +49,7 @@ public class EventEditActivity extends AppCompatActivity {
            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             time = LocalTime.now();
         }
+        meal.setSelectedDate(CalendarUtils.formattedDate(CalendarUtils.selectedDate));
         eventDateTV.setText("Date: " + CalendarUtils.formattedDate(CalendarUtils.selectedDate));
         eventTimeTV.setText("Time: " + CalendarUtils.formattedTime(time));
 
@@ -77,7 +78,7 @@ public class EventEditActivity extends AppCompatActivity {
                         MealsRemoteSourceDataImpl.getInstance(),
                         MealsLocalDataSourceImpl.getInstance(getApplicationContext())
                 ).insertDayMeal(meal);
-        showSnackbar(getApplicationContext(), view, "Meal added to favorites");
+        showSnackbar(getApplicationContext(), view, "Meal added to dayMeals");
         Event.eventsList.add(newEvent);
         finish();
     }

@@ -5,12 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--Image view for displaying
+        our slider image-->
+
     <TextView
         android:id="@+id/idTVtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/muli_black"
@@ -21,37 +24,49 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-    <!--Image view for displaying
-        our slider image-->
     <com.airbnb.lottie.LottieAnimationView
 
         android:id="@+id/animationView"
-        android:layout_width="258dp"
-        android:layout_height="244dp"
-        android:scaleType="fitXY"
+        android:layout_width="313dp"
+        android:layout_height="288dp"
         android:layout_below="@id/idTVtitle"
-        android:padding="10dp"
-        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        app:lottie_fileName="foods_animation.json"
+        android:layout_marginTop="50dp"
+        android:padding="10dp"
+        android:scaleType="fitXY"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
+        app:lottie_fileName="foods_animation.json"
+        app:lottie_loop="true" />
 
     <!--text view for displaying our
         slider description-->
-    <TextView
-        android:id="@+id/idTVheading"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/animationView"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="20dp"
-        android:fontFamily="@font/muli_black"
-        android:padding="10dp"
-        android:text="C++ data structure and ALgorithm Course"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="30dp"
+        android:elevation="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/AppThem"
+        app:cardCornerRadius="20dp">
 
+        <TextView
+            android:id="@+id/idTVheading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/muli_black"
+            android:padding="10dp"
+            android:text="C++ data structure and ALgorithm Course"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

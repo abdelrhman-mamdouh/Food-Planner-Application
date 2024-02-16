@@ -24,6 +24,11 @@ public class DayPresenterImpl implements DayMealsPresenter {
         return repo.getDayMealList();
     }
 
+    @Override
+    public LiveData<List<DayMeal>> getMealsByDate(String selectedDate) {
+        return repo.getDayMealListByDate(selectedDate);
+    }
+
 
     @Override
     public void deleteDayMeal(DayMeal meal) {

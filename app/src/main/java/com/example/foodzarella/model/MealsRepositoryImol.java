@@ -38,6 +38,12 @@ public class MealsRepositoryImol implements MealsRepository {
     }
 
     @Override
+    public LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate) {
+        return mealsLocalDataSource.getDayMealListByDate(selectedDate);
+    }
+
+
+    @Override
     public void getAllMeals(NetworkCallback networkCallback,String category) {
         mealsRemoteDataSource.makeNetworkCall(networkCallback,category);
     }

@@ -1,5 +1,7 @@
 package com.example.foodzarella;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +26,13 @@ public class LogInFragment extends Fragment {
     private EditText editTextPassword;
     private Button buttonLogin;
     private FirebaseAuth mAuth;
+    private SharedPreferences sharedPreferences;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+        sharedPreferences = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -59,6 +64,7 @@ public class LogInFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+                            saveUserData(email);
                             MainActivity mainActivity = (MainActivity) getActivity();
                             mainActivity.navigateToHome();
                         } else {
@@ -67,5 +73,11 @@ public class LogInFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void saveUserData(String email) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("email", email);
+        editor.apply();
     }
 }
