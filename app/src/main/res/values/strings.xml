@@ -51,6 +51,10 @@
     <string name="country">Country</string>
     <string name="search">Search</string>
     <string name="ingredient">Ingredient</string>
+    <string name="title_meal_plan">Meal Plan</string>
+
+    <string name="back"><![CDATA[<-]]></string>
+    <string name="forward"><![CDATA[->]]></string>
 
 
 </resources>

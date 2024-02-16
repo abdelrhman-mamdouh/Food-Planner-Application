@@ -7,7 +7,7 @@ import com.example.foodzarella.model.Meal;
 
 import java.util.List;
 
-public interface FacMealView {
+public interface FavMealView {
     public void showData(LiveData <List<Meal>> products);
     public void showErrMsg(String error);
 }

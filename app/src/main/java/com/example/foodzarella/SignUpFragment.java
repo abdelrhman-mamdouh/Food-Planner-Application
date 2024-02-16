@@ -23,8 +23,7 @@ public class SignUpFragment extends Fragment {
     private DatabaseReference mDatabase;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sign_up_fragment, container, false);
 
         mAuth = FirebaseAuth.getInstance();
@@ -41,7 +40,6 @@ public class SignUpFragment extends Fragment {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             String confirmPassword = etConfirmPassword.getText().toString().trim();
-
             if (TextUtils.isEmpty(name)) {
                 etName.setError("Please enter your name");
                 return;
@@ -66,21 +64,19 @@ public class SignUpFragment extends Fragment {
                 etConfirmPassword.setError("Passwords do not match");
                 return;
             }
-            
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                String userId = user.getUid();
-                                User newUser = new User(userId, name, email);
-                                mDatabase.child("users").child(userId).setValue(newUser);
-                            }
-                        } else {
-                            Toast.makeText(getContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    if (user != null) {
+                        String userId = user.getUid();
+                        User newUser = new User(userId, name, email);
+                        mDatabase.child("users").child(userId).setValue(newUser);
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         return view;

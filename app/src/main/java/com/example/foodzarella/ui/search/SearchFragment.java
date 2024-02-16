@@ -46,12 +46,12 @@ public class SearchFragment extends Fragment implements AllMealView {
     AutoCompleteTextView autoCompleteTxt;
     ArrayAdapter<String> adapterItems;
     RecyclerView recyclerView;
-    RecyclerView recyclerViewCountry;
     String countryName;
     private ChipGroup chipGroup;
     private ProgressBar loader;
     private EditText searchEditText;
     private TextView textViewFilerName;
+    Chip selectedChip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,48 +62,54 @@ public class SearchFragment extends Fragment implements AllMealView {
         textViewFilerName = view.findViewById(R.id.tv_filter);
         autoCompleteTxt = view.findViewById(R.id.auto_complete_txt);
         chipGroup = view.findViewById(R.id.chipGroup);
-        initializeRecyclerView(recyclerView);
+        initializeRecyclerViewCategory(recyclerView);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
-                Chip chip = view.findViewById(checkedId);
-                switch (chip.getText().toString()) {
+                selectedChip = view.findViewById(checkedId);
+                switch (selectedChip.getText().toString()) {
                     case "Country":
-                        changeFilter("Country","Select Country",countries);
+                        changeFilter("Country", "Select Country", countries);
                         break;
                     case "Ingredient":
-                        changeFilter("Ingredient","Select Ingredient",countries);
+                        changeFilter("Ingredient", "Select Ingredient", countries);
                         break;
                     case "Category":
-                        changeFilter("Category","Select Category",categories);
+                        changeFilter("Category", "Select Category", categories);
                         break;
                 }
             }
         });
+
         chipGroup.check(R.id.chipCategory);
-          autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 showLoader();
-                String category = parent.getItemAtPosition(position).toString();
-                searchMealsByCategory(category);
+                String searchBy = parent.getItemAtPosition(position).toString();
+                if (selectedChip != null) {
+                    if (selectedChip.getText().toString().equals("Category")) {
+                        searchMealsByCategory(searchBy);
+                    } else if (selectedChip.getText().toString().equals("Country")) {
+                        searchMealsByCountry(searchBy);
+                    }
+                }
             }
         });
-
     }
 
-    private void changeFilter(String filterName,String selectName,String[]listNames) {
+    private void changeFilter(String filterName, String selectName, String[] listNames) {
         textViewFilerName.setText(filterName);
         autoCompleteTxt.setText(selectName);
         adapterItems = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listNames);
         autoCompleteTxt.setAdapter(adapterItems);
-        autoCompleteTxt.notify();
     }
 
     private void searchMealsByCategory(String category) {
@@ -112,19 +118,18 @@ public class SearchFragment extends Fragment implements AllMealView {
         allMealsPresenter.getMealsByCategory();
     }
 
-    private void handleMealsByCountry() {
-        allMealsPresenter = new AllMealsPresenterImpl(this, MealsRepositoryImol.getInstance(MealsRemoteSourceDataImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(requireContext())), countryName);
-        recyclerViewCountry.setAdapter(mealAdapter);
-        allMealsPresenter.getMealsByCategory();
+    private void searchMealsByCountry(String category) {
+        allMealsPresenter = new AllMealsPresenterImpl(this, MealsRepositoryImol.getInstance(MealsRemoteSourceDataImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(requireContext())), category);
+        recyclerView.setAdapter(mealAdapter);
+        allMealsPresenter.getMealsByCountry();
     }
 
-    private void initializeRecyclerView(RecyclerView recyclerView) {
+    private void initializeRecyclerViewCategory(RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         mealAdapter = new MealAdapter(new ArrayList<>(), getContext(), MealsLocalDataSourceImpl.getInstance(requireContext()), MealsRemoteSourceDataImpl.getInstance());
-
     }
 
     @Override
@@ -134,9 +139,12 @@ public class SearchFragment extends Fragment implements AllMealView {
             public void run() {
                 mealAdapter.setList(meals);
                 mealAdapter.notifyDataSetChanged();
-                RxTextView.textChanges(searchEditText).debounce(300, TimeUnit.MILLISECONDS).map(text -> text.toString()).subscribe(text -> {
-                    filter(text, meals);
-                });
+                RxTextView.textChanges(searchEditText)
+                        .debounce(100, TimeUnit.MILLISECONDS)
+                        .map(text -> text.toString())
+                        .subscribe(text -> {
+                            filterType(text, meals);
+                        });
                 hideLoader();
             }
         }, 2000);
@@ -144,7 +152,10 @@ public class SearchFragment extends Fragment implements AllMealView {
 
     @Override
     public void showErrMsg(String error) {
-        new AlertDialog.Builder(requireContext()).setMessage(error).setTitle("An Error Occurred").show();
+        new AlertDialog.Builder(requireContext())
+                .setMessage(error)
+                .setTitle("An Error Occurred")
+                .show();
         hideLoader();
     }
 
@@ -162,10 +173,14 @@ public class SearchFragment extends Fragment implements AllMealView {
         autoCompleteTxt.setText("");
     }
 
-    private void filter(String text, List<Meal> mealList) {
-        Observable.fromIterable(mealList).filter(name -> name.getStrMeal().toLowerCase().contains(text.toLowerCase()) || text.isEmpty()).observeOn(AndroidSchedulers.mainThread()).toList().subscribe(meals -> {
-            mealAdapter.setList(meals);
-            mealAdapter.notifyDataSetChanged();
-        });
+    private void filterType(String text, List<Meal> mealList) {
+        Observable.fromIterable(mealList)
+                .filter(name -> name.getStrMeal().toLowerCase().contains(text.toLowerCase()) || text.isEmpty())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toList()
+                .subscribe(meals -> {
+                    mealAdapter.setList(meals);
+                    mealAdapter.notifyDataSetChanged();
+                });
     }
 }

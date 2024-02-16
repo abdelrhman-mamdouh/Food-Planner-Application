@@ -1,6 +1,6 @@
-package com.example.foodzarella.country;
+package com.example.foodzarella.country.view;
 
-import com.example.foodzarella.categorys.model.Category;
+import com.example.foodzarella.country.model.MealCountry;
 
 import java.util.List;
 

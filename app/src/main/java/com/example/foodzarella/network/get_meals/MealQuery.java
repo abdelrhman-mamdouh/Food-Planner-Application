@@ -3,7 +3,7 @@ package com.example.foodzarella.network.get_meals;
 
 
 import com.example.foodzarella.categorys.model.CategoryResponse;
-import com.example.foodzarella.country.MealCountriesResponse;
+import com.example.foodzarella.country.model.MealCountriesResponse;
 import com.example.foodzarella.model.MealResponse;
 
 import retrofit2.Call;

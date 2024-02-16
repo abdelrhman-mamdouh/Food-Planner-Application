@@ -3,6 +3,7 @@ package com.example.foodzarella.model;
 import androidx.lifecycle.LiveData;
 
 
+
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.network.get_meals.MealsRemoteDataSource;
 import com.example.foodzarella.network.get_meals.NetworkCallback;
@@ -32,17 +33,34 @@ public class MealsRepositoryImol implements MealsRepository {
     }
 
     @Override
+    public LiveData<List<DayMeal>> getDayMealList() {
+        return mealsLocalDataSource.getDayMealList();
+    }
+
+    @Override
     public void getAllMeals(NetworkCallback networkCallback,String category) {
         mealsRemoteDataSource.makeNetworkCall(networkCallback,category);
     }
 
     @Override
-    public void delete(Meal meal) {
-        mealsLocalDataSource.delete(meal);
+    public void delete(Meal product) {
+        mealsLocalDataSource.delete(product);
     }
 
     @Override
-    public void insert(Meal meal) {
-      mealsLocalDataSource.insert(meal);
+    public void insert(Meal product) {
+        mealsLocalDataSource.insert(product);
     }
+
+    @Override
+    public void deleteDayMeal(DayMeal dayMeal) {
+        mealsLocalDataSource.deleteDayMeal(dayMeal);
+    }
+
+    @Override
+    public void insertDayMeal(DayMeal dayMeal) {
+        mealsLocalDataSource.insertDayMeal(dayMeal);
+    }
+
+
 }

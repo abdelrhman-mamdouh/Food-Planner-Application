@@ -32,4 +32,9 @@
         android:name="com.example.foodzarella.LogOutFragment"
         android:label="fragment_log_out"
         tools:layout="@layout/fragment_log_out" />
+    <fragment
+        android:id="@+id/navigation_meal_plan"
+        android:name="com.example.foodzarella.ui.meal_plan.MealPlanFragment"
+        android:label="fragment_navigation_meal_plan"
+        tools:layout="@layout/fragment_navigation_meal_plan" />
 </navigation>

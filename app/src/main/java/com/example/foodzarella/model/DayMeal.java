@@ -4,9 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-@Entity(tableName = "meal_table")
-public class Meal {
+@Entity(tableName = "day_meal_table")
+public class DayMeal {
     @ColumnInfo(name = "meal_name")
     private String strMeal;
     @ColumnInfo(name = "meal_image_url")
@@ -17,12 +16,12 @@ public class Meal {
     @ColumnInfo(name = "meal_id")
     private String idMeal;
 
-    public Meal(String strMeal, String strMealThumb, String idMeal) {
+    public DayMeal(String strMeal, String strMealThumb, String idMeal) {
         this.strMeal = strMeal;
         this.strMealThumb = strMealThumb;
         this.idMeal = idMeal;
     }
- public String getStrMeal() {
+    public String getStrMeal() {
         return strMeal;
     }
 

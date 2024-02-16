@@ -1,14 +1,9 @@
 package com.example.foodzarella.allmeals.presenter;
 
 
-import static android.content.ContentValues.TAG;
-
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.foodzarella.allmeals.view.AllMealView;
-import com.example.foodzarella.categorys.model.Category;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealResponse;
 import com.example.foodzarella.model.MealsRepository;
@@ -72,7 +67,22 @@ public AllMealsPresenterImpl(AllMealView view, MealsRepository repo,String searc
 
     @Override
     public void getMealsByCountry() {
-        repo.getAllMeals(this,searchBy);
+        Call<MealResponse> callCountry = ApiClient.getClient().create(MealQuery.class).getMealsByCountry(searchBy);
+        callCountry.enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Meal> mealList = response.body().getMeals();
+                    view.showData(mealList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealResponse> call, Throwable throwable) {
+                view.showErrMsg("Failed to fetch categories");
+            }
+        });
+
     }
 
     @Override
@@ -84,6 +94,7 @@ public AllMealsPresenterImpl(AllMealView view, MealsRepository repo,String searc
     public void onSuccessResult(List<Meal> mealList) {
         view.showData(mealList);
     }
+
 
     @Override
     public void onFailureResult(String errorMsg) {

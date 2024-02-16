@@ -1,9 +1,7 @@
-package com.example.foodzarella.allmeals.view;
+package com.example.foodzarella.day_meal.view;
 
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,21 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foodzarella.R;
 
 
-public class ViewHolderMeals extends RecyclerView.ViewHolder {
+public class DayMealViewHolder extends RecyclerView.ViewHolder {
 
-    ImageView imageView;
-    TextView titleTextView;
-    AppCompatImageButton MealPlan;
-    CardView layout;
+    public ImageView imageView;
+    public TextView titleTextView;
+    public CardView layout;
+    public AppCompatImageButton remove;
 
-    AppCompatImageButton add;
-
-    public ViewHolderMeals(@NonNull View itemView) {
+    public DayMealViewHolder(@NonNull View itemView) {
         super(itemView);
         imageView = itemView.findViewById(R.id.iv_meal);
         titleTextView = itemView.findViewById(R.id.tv_meal_name);
         layout = itemView.findViewById(R.id.cardView);
-        add = itemView.findViewById(R.id.favoriteButton);
-        MealPlan=itemView.findViewById(R.id.btn_meal_plan);
+        remove=itemView.findViewById(R.id.removeButton);
     }
 }

@@ -17,7 +17,7 @@ import com.example.foodzarella.databinding.FragmentFavoritesBinding;
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.db.MealsLocalDataSourceImpl;
 import com.example.foodzarella.favmeals.presenter.FavPresenterImpl;
-import com.example.foodzarella.favmeals.view.FacMealView;
+import com.example.foodzarella.favmeals.view.FavMealView;
 import com.example.foodzarella.favmeals.view.FavAdapter;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
@@ -26,7 +26,7 @@ import com.example.foodzarella.network.get_meals.MealsRemoteSourceDataImpl;
 
 import java.util.List;
 
-public class FavoritesFragment extends Fragment implements FacMealView{
+public class FavoritesFragment extends Fragment implements FavMealView {
     private FragmentFavoritesBinding binding;
     private RecyclerView recyclerView;
     private FavAdapter favAdapter;

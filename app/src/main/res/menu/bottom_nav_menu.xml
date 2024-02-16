@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
 
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home"
-        android:titleTextColor="@color/white" />
+        />
 
     <item
         android:id="@+id/navigation_search"
         android:icon="@drawable/icon_search"
         android:title="@string/title_search"
-        android:titleTextColor="@color/white" />
+        />
+
+    <item
+        android:id="@+id/navigation_meal_plan"
+        android:icon="@drawable/baseline_calendar_month_24"
+        android:title="@string/title_meal_plan"
+        />
 
     <item
         android:id="@+id/navigation_favorites"
         android:icon="@drawable/ic_favorite_off"
         android:title="@string/title_favorite"
-        android:titleTextColor="@color/white" />
+       />
 
 </menu>

@@ -1,11 +1,10 @@
-package com.example.foodzarella.country;
+package com.example.foodzarella.country.view;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodzarella.R;
-import com.example.foodzarella.network.get_meals.MealQuery;
+import com.example.foodzarella.country.model.MealCountry;
 
 import java.util.List;
 

@@ -16,10 +16,10 @@ import com.example.foodzarella.R;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
 
-    ImageView imageView;
-    TextView titleTextView;
-    CardView layout;
-    AppCompatImageButton remove;
+    public ImageView imageView;
+    public TextView titleTextView;
+    public CardView layout;
+    public AppCompatImageButton remove;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);

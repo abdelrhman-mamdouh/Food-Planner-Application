@@ -6,14 +6,17 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.foodzarella.model.DayMeal;
 import com.example.foodzarella.model.Meal;
 
 
 
-@Database(entities = {Meal.class}, version = 1)
+@Database(entities = {Meal.class, DayMeal.class}, version = 1,exportSchema = false)
 public abstract class MealDatabase extends RoomDatabase {
     private static MealDatabase instance=null;
     public abstract MealDAO getMealDAO();
+    public abstract DayMealDao getDayMealDAO();
+
     public static synchronized MealDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),

@@ -1,4 +1,4 @@
-package com.example.foodzarella.country;
+package com.example.foodzarella.country.model;
 
 import java.util.List;
 

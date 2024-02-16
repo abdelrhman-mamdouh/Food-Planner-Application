@@ -1,4 +1,4 @@
-package com.example.foodzarella.country;
+package com.example.foodzarella.country.model;
 
 public class MealCountry {
     private String strArea;

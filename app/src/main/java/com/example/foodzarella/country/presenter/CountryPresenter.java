@@ -1,8 +1,8 @@
-package com.example.foodzarella.country;
+package com.example.foodzarella.country.presenter;
 
-import com.example.foodzarella.categorys.model.Category;
-import com.example.foodzarella.categorys.model.CategoryResponse;
-import com.example.foodzarella.categorys.view.CategoryView;
+import com.example.foodzarella.country.view.CountryView;
+import com.example.foodzarella.country.model.MealCountriesResponse;
+import com.example.foodzarella.country.model.MealCountry;
 import com.example.foodzarella.network.ApiClient;
 import com.example.foodzarella.network.get_meals.MealQuery;
 
