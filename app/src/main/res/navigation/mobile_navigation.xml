@@ -34,7 +34,7 @@
         tools:layout="@layout/fragment_log_out" />
     <fragment
         android:id="@+id/navigation_meal_plan"
-        android:name="com.example.foodzarella.ui.meal_plan.MealPlanFragment"
+        android:name="com.example.foodzarella.ui.mealPlan.MealPlanFragment"
         android:label="Meal Plan"
         tools:layout="@layout/fragment_navigation_meal_plan" />
 </navigation>

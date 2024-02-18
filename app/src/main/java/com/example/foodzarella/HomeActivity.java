@@ -1,8 +1,12 @@
 package com.example.foodzarella;
 
+import static com.example.foodzarella.SnackbarUtils.showTopSnackbar;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,15 +19,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.foodzarella.databinding.ActivityHomeBinding;
+import com.example.foodzarella.network.ConnectivityReceiver;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -31,9 +40,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityListener {
 
     private ActivityHomeBinding binding;
     private DrawerLayout drawerLayout;
@@ -41,10 +55,15 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar myToolbar;
     private SharedPreferences sharedPreferences;
     private FirebaseAuth mAuth;
+    private ConnectivityReceiver connectivityReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        connectivityReceiver = new ConnectivityReceiver();
+        connectivityReceiver.setListener(this);
+
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
@@ -114,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
         editor.apply();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        finish();
+
     }
 
     @Override
@@ -134,22 +153,59 @@ public class HomeActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navigator_layout);
         View headerView = navigationView.getHeaderView(0);
 
-        String displayName = sharedPreferences.getString("displayName", "");
-        String email = sharedPreferences.getString("email", "");
-        String photoUriString = sharedPreferences.getString("photoUri", "");
-        Uri photoUri = photoUriString != null ? Uri.parse(photoUriString) : null;
-
         TextView userNameTextView = headerView.findViewById(R.id.tv_user_name);
         TextView emailTextView = headerView.findViewById(R.id.tv_user_email);
         ImageView profileImageView = headerView.findViewById(R.id.iv_profile);
 
-        userNameTextView.setText(displayName);
-        emailTextView.setText(email);
-        if (photoUri != null) {
-            Glide.with(this).load(photoUri).into(profileImageView);
-        } else {
-            profileImageView.setImageResource(R.drawable.logo_one);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String email = currentUser.getEmail();
+            String name = currentUser.getDisplayName();
+            userNameTextView.setText(name);
+            if(name.equals("")){
+                String[] parts = email.split("@");
+                String cutName = parts[0];
+                userNameTextView.setText(cutName);
+            }
+
+            emailTextView.setText(email);
+            String photo = sharedPreferences.getString("photoUri", "");
+            Uri photoUri = null;
+
+            if (photo != null && !photo.isEmpty()) {
+                photoUri = Uri.parse(photo);
+            }
+
+            if (photoUri != null) {
+                Glide.with(getBaseContext())
+                        .load(photoUri)
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .into(profileImageView);
+            } else {
+                // Handle case where photoUri is null or empty
+                // For example, you can load a default placeholder image
+                Glide.with(getBaseContext())
+                        .load(R.drawable.logo_one)
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .into(profileImageView);
+            }
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        unregisterReceiver(connectivityReceiver);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+
+        View rootView = getWindow().getDecorView().getRootView();
+        if (isConnected) {
+            showTopSnackbar(rootView, "Connected to internet", "green");
+        } else {
+            showTopSnackbar(rootView, "No internet connection", "red");
+        }
+    }
 }

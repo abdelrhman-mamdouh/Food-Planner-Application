@@ -110,24 +110,6 @@ public class AuthFragment extends Fragment {
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            saveUserData(user.getDisplayName(), user.getEmail(), user.getPhotoUrl());
-                            updateUI(user);
-                        }
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(getContext(), "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                        updateUI(null);
-                    }
-                });
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -161,7 +143,6 @@ public class AuthFragment extends Fragment {
                             updateUI(user);
                         }
                     } else {
-
                         Toast.makeText(getContext(), "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                         updateUI(null);

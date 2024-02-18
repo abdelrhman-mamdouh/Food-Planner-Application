@@ -1,5 +1,4 @@
 package com.example.foodzarella.model;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,6 +8,7 @@ import androidx.room.PrimaryKey;
 public class Meal {
     @ColumnInfo(name = "meal_name")
     private String strMeal;
+
     @ColumnInfo(name = "meal_image_url")
     private String strMealThumb;
 
@@ -17,12 +17,18 @@ public class Meal {
     @ColumnInfo(name = "meal_id")
     private String idMeal;
 
+    // No-argument constructor
+    public Meal() {
+        // Required for Firestore to be able to deserialize the object
+    }
+
     public Meal(String strMeal, String strMealThumb, String idMeal) {
         this.strMeal = strMeal;
         this.strMealThumb = strMealThumb;
         this.idMeal = idMeal;
     }
- public String getStrMeal() {
+
+    public String getStrMeal() {
         return strMeal;
     }
 

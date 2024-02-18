@@ -9,6 +9,17 @@ import java.time.LocalDate;
 
 @Entity(tableName = "day_meal_table")
 public class DayMeal {
+    public void setStrMeal(String strMeal) {
+        this.strMeal = strMeal;
+    }
+
+    public void setStrMealThumb(String strMealThumb) {
+        this.strMealThumb = strMealThumb;
+    }
+
+    public void setIdMeal(@NonNull String idMeal) {
+        this.idMeal = idMeal;
+    }
 
     @ColumnInfo(name = "meal_date")
     private String selectedDate;
@@ -21,7 +32,9 @@ public class DayMeal {
     @NonNull
     @ColumnInfo(name = "meal_id")
     private String idMeal;
+    public DayMeal(){
 
+    }
     public DayMeal(String strMeal, String strMealThumb, String idMeal, String selectedDate) {
         this.strMeal = strMeal;
         this.strMealThumb = strMealThumb;

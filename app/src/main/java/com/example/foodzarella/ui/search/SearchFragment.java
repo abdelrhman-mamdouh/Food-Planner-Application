@@ -1,6 +1,8 @@
 package com.example.foodzarella.ui.search;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,9 +16,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodzarella.R;
 import com.example.foodzarella.allmeals.presenter.AllMealsPresenter;
 import com.example.foodzarella.allmeals.presenter.AllMealsPresenterImpl;
@@ -28,6 +32,7 @@ import com.example.foodzarella.model.MealsRepositoryImol;
 import com.example.foodzarella.network.get_meals.MealsRemoteSourceDataImpl;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding4.widget.RxTextView;
 
 import java.util.ArrayList;
@@ -48,24 +53,25 @@ public class SearchFragment extends Fragment implements AllMealView {
     RecyclerView recyclerView;
     String countryName;
     private ChipGroup chipGroup;
-    private ProgressBar loader;
     private EditText searchEditText;
     private TextView textViewFilerName;
     Chip selectedChip;
-
+    TextInputLayout textInputLayout ;
+    LottieAnimationView backgroundAnimationView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewCategory);
         searchEditText = view.findViewById(R.id.search_food);
-        loader = view.findViewById(R.id.loader);
+        backgroundAnimationView = view.findViewById(R.id.loaderss);
+
         textViewFilerName = view.findViewById(R.id.tv_filter);
         autoCompleteTxt = view.findViewById(R.id.auto_complete_txt);
         chipGroup = view.findViewById(R.id.chipGroup);
+        textInputLayout = view.findViewById(R.id.textInputLayout);
         initializeRecyclerViewCategory(recyclerView);
         return view;
     }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -73,9 +79,10 @@ public class SearchFragment extends Fragment implements AllMealView {
         if (arguments != null && arguments.containsKey("categoryName")) {
             String categoryName = arguments.getString("categoryName");
             showLoader();
-                chipGroup.check(R.id.chipCategory);
-                searchMealsByCategory(categoryName);
-                 autoCompleteTxt.setText(categoryName);
+            chipGroup.check(R.id.chipCategory);
+            textViewFilerName.setText("Search by "+categoryName);
+            autoCompleteTxt.setText(categoryName);
+            searchMealsByCategory(categoryName);
             autoCompleteTxt.setCompletionHint(categoryName);
         }
         if (arguments != null && arguments.containsKey("countryName")) {
@@ -83,6 +90,7 @@ public class SearchFragment extends Fragment implements AllMealView {
             showLoader();
             chipGroup.check(R.id.chipCountry);
             searchMealsByCountry(countryName);
+            textViewFilerName.setText("Search by "+countryName);
             autoCompleteTxt.setText(countryName);
             autoCompleteTxt.setCompletionHint(countryName);
         }
@@ -96,7 +104,12 @@ public class SearchFragment extends Fragment implements AllMealView {
                             changeFilter("Country", "Select Country", countries);
                             break;
                         case "Ingredient":
-                            changeFilter("Ingredient", "Select Ingredient", countries);
+                            autoCompleteTxt.setDropDownBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            autoCompleteTxt.setVisibility(View.GONE);
+                            textInputLayout.setVisibility(View.GONE);
+                            textViewFilerName.setText("Ingredient");
+                            showLoader();
+                            getIngredientMeals();
                             break;
                         case "Category":
                             changeFilter("Category", "Select Category", categories);
@@ -113,8 +126,10 @@ public class SearchFragment extends Fragment implements AllMealView {
                 String searchBy = parent.getItemAtPosition(position).toString();
                 if (selectedChip != null) {
                     if (selectedChip.getText().toString().equals("Category")) {
+                        textViewFilerName.setText("Category by "+searchBy);
                         searchMealsByCategory(searchBy);
                     } else if (selectedChip.getText().toString().equals("Country")) {
+                        textViewFilerName.setText("Country by "+searchBy);
                         searchMealsByCountry(searchBy);
                     }
                 }
@@ -123,6 +138,9 @@ public class SearchFragment extends Fragment implements AllMealView {
     }
 
     private void changeFilter(String filterName, String selectName, String[] listNames) {
+        autoCompleteTxt.setVisibility(View.VISIBLE);
+        textInputLayout.setVisibility(View.VISIBLE);
+        autoCompleteTxt.setDropDownBackgroundResource(R.color.white);
         textViewFilerName.setText(filterName);
         autoCompleteTxt.setText(selectName);
         autoCompleteTxt.setCompletionHint(selectName);
@@ -136,6 +154,11 @@ public class SearchFragment extends Fragment implements AllMealView {
         allMealsPresenter.getMealsByCategory();
     }
 
+    private void getIngredientMeals(){
+        allMealsPresenter = new AllMealsPresenterImpl(this, MealsRepositoryImol.getInstance(MealsRemoteSourceDataImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(getContext())), "chicken_breast");
+        recyclerView.setAdapter(mealAdapter);
+        allMealsPresenter.getMeals();
+    }
     private void searchMealsByCountry(String category) {
         allMealsPresenter = new AllMealsPresenterImpl(this, MealsRepositoryImol.getInstance(MealsRemoteSourceDataImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(requireContext())), category);
         recyclerView.setAdapter(mealAdapter);
@@ -144,9 +167,8 @@ public class SearchFragment extends Fragment implements AllMealView {
 
     private void initializeRecyclerViewCategory(RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        GridLayoutManager gridLayoutManagerCountry = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(gridLayoutManagerCountry);
         mealAdapter = new MealAdapter(new ArrayList<>(), getContext(), MealsLocalDataSourceImpl.getInstance(requireContext()), MealsRemoteSourceDataImpl.getInstance());
     }
 
@@ -178,11 +200,11 @@ public class SearchFragment extends Fragment implements AllMealView {
     }
 
     private void showLoader() {
-        loader.setVisibility(View.VISIBLE);
+        backgroundAnimationView.setVisibility(View.VISIBLE);
     }
 
     private void hideLoader() {
-        loader.setVisibility(View.GONE);
+        backgroundAnimationView.setVisibility(View.GONE);
     }
 
     @Override

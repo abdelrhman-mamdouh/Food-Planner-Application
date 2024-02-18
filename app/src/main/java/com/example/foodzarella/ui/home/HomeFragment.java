@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodzarella.allmeals.presenter.AllMealsPresenter;
 import com.example.foodzarella.allmeals.presenter.AllMealsPresenterImpl;
 import com.example.foodzarella.allmeals.view.AllMealView;
 import com.example.foodzarella.allmeals.view.MealAdapter;
-import com.example.foodzarella.categorys.model.Category;
-import com.example.foodzarella.categorys.presenter.CategoryPresenterImpl;
-import com.example.foodzarella.categorys.view.CategoryView;
-import com.example.foodzarella.categorys.view.GategoryAdapter;
+import com.example.foodzarella.categories.model.Category;
+import com.example.foodzarella.categories.presenter.CategoryPresenterImpl;
+import com.example.foodzarella.categories.view.CategoryView;
+import com.example.foodzarella.categories.view.GategoryAdapter;
 import com.example.foodzarella.country.view.CountryAdapter;
 import com.example.foodzarella.country.presenter.CountryPresenter;
 import com.example.foodzarella.country.view.CountryView;
@@ -40,7 +41,7 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
     private AllMealsPresenter allMealsPresenter;
     private CountryPresenter countryPresenter;
     private CountryAdapter countryAdapter;
-
+    LottieAnimationView backgroundAnimationView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        backgroundAnimationView = view.findViewById(R.id.loaderss);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -89,7 +90,6 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
     @Override
     public void showData(List<Meal> meals) {
         mealAdapter.setList(meals);
-
         mealAdapter.notifyDataSetChanged();
     }
 
@@ -121,6 +121,28 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
     public void onResume() {
         super.onResume();
         mealAdapter.notifyDataSetChanged();
+        if (isDatasetEmpty()) {
+            showLoader();
+        } else {
+            hideLoader();
+            mealAdapter.notifyDataSetChanged();
+        }
+    }
+    private boolean isDatasetEmpty() {
+
+        if (mealAdapter != null) {
+            return mealAdapter.getItemCount() == 0;
+        }
+        return true;
+    }
+
+
+    private void showLoader() {
+        backgroundAnimationView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoader() {
+        backgroundAnimationView.setVisibility(View.GONE);
     }
 
 }

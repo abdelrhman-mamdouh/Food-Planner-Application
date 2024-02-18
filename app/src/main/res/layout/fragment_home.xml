@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView2"
                 android:layout_width="match_parent"
@@ -61,7 +62,16 @@
                 android:padding="16dp"
                 android:text="@string/country"
                 android:textColor="@color/black" />
-
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loaderss"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerInParent="true"
+                android:layout_margin="30dp"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="not found.json"
+                app:lottie_loop="true" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView3"
                 android:layout_width="match_parent"

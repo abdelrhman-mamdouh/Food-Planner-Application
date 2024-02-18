@@ -3,7 +3,9 @@ package com.example.foodzarella;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class LogInFragment extends Fragment {
 
@@ -44,40 +50,57 @@ public class LogInFragment extends Fragment {
         editTextPassword = rootView.findViewById(R.id.et_password);
         buttonLogin = rootView.findViewById(R.id.btn_login);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = editTextEmail.getText().toString();
-                String password = editTextPassword.getText().toString();
-                login(email, password);
+        buttonLogin.setOnClickListener(v -> {
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+
+            if (TextUtils.isEmpty(email)) {
+                editTextEmail.setError("Please enter your email");
+                return;
             }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                editTextEmail.setError("Invalid email format");
+                return;
+            }
+            if (TextUtils.isEmpty(password)) {
+                editTextPassword.setError("Please enter a password");
+                return;
+            }
+            checkIfUserExists(email, password,rootView);
         });
+
 
         return rootView;
     }
 
-    private void login(String email, String password) {
+    private void checkIfUserExists(String email, String password, View view) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("users");
+
+        Query query = usersRef.whereEqualTo("email", email);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (task.getResult().isEmpty()) {
+                    SnackbarUtils.showSnackbar(requireContext(), view, "User not found");
+                } else {
+                    loginUser(email, password,view);
+                }
+            } else {
+                SnackbarUtils.showSnackbar(requireContext(), view, "Error checking user");
+            }
+        });
+    }
+
+    private void loginUser(String email, String password,View view) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
-                            saveUserData(email);
-                            MainActivity mainActivity = (MainActivity) getActivity();
-                            mainActivity.navigateToHome();
-                        } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getActivity(), "Authentication failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                .addOnSuccessListener(authResult -> {
+                    SnackbarUtils.showSnackbar(requireContext(), view, "Login Successful");
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.navigateToHome();
+                })
+                .addOnFailureListener(e -> {
+                    SnackbarUtils.showSnackbar(requireContext(), view, "Login Unsuccessful");
                 });
     }
 
-    private void saveUserData(String email) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("email", email);
-        editor.apply();
-    }
 }

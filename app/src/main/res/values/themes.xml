@@ -5,7 +5,10 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.FoodZarella" parent="Base.Theme.FoodZarella" />
+    <style name="Theme.FoodZarella" parent="Base.Theme.FoodZarella" >
+
+        <item name="snackbarStyle">@color/AppThem</item>
+    </style>
 
     <style name="Theme.FoodZarella.NoActionBar">
         <item name="windowActionBar">false</item>

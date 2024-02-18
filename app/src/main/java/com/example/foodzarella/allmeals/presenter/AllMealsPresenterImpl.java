@@ -30,7 +30,7 @@ public AllMealsPresenterImpl(AllMealView view, MealsRepository repo,String searc
     @Override
     public void getMeals() {
 
-        Call<MealResponse> call =ApiClient.getClient().create(MealQuery.class).getMeals("chicken_breast");
+        Call<MealResponse> call =ApiClient.getClient().create(MealQuery.class).getMeals("");
         call.enqueue(new Callback<MealResponse>() {
             @Override
             public void onResponse(@NonNull Call<MealResponse> call, @NonNull Response<MealResponse> response) {

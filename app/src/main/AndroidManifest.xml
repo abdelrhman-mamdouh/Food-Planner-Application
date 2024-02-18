@@ -20,13 +20,13 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
         <activity
-            android:name=".meal_details.MealDetailsActivity"
+            android:name=".mealDetails.MealDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home" />
-        <activity android:name=".ui.meal_plan.EventEditActivity" />
+        <activity android:name=".ui.mealPlan.EventEditActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />

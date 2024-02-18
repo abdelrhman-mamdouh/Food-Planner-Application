@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_three"
     android:orientation="vertical"
-    tools:context=".ui.meal_plan.MealPlanFragment">
+
+    tools:context=".ui.mealPlan.MealPlanFragment">
 
     <!-- Header Section -->
     <LinearLayout
@@ -13,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
+
         android:orientation="horizontal">
 
         <Button
@@ -20,10 +23,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/pink"
+            android:backgroundTint="@color/white"
             android:background="@null"
             android:text="@string/back"
-            android:textColor="@color/blue"
+            android:textColor="@color/AppThem"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -32,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            style="@style/TextViewStyle"
             android:text="Feb 2021"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -42,10 +46,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/pink"
+            android:backgroundTint="@color/white"
             android:background="@null"
             android:text="@string/forward"
-            android:textColor="@color/blue"
+            android:textColor="@color/AppThem"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -57,16 +61,80 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="SUN"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
 
-        <!-- Include other weekdays TextViews similarly -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SUN"
+                style="@style/TextViewStyle"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MON"
+
+                style="@style/TextViewStyle"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TUE"
+                style="@style/TextViewStyle"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="WED"
+                style="@style/TextViewStyle"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="THUR"
+                style="@style/TextViewStyle"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="FRI"
+                style="@style/TextViewStyle"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SAT"
+                style="@style/TextViewStyle"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -84,11 +152,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         style="@style/ButtonTextStyle"
-        android:layout_margin="20dp"
-        android:backgroundTint="@color/pink"
+        android:layout_margin="15dp"
+        android:backgroundTint="@color/AppThem"
         android:text="Add Meal"
-        android:textColor="@color/blue"
-        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <!-- Event List RecyclerView -->
@@ -96,6 +164,6 @@
         android:id="@+id/eventListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"  />
+        android:layout_weight="5"  />
 
 </LinearLayout>
