@@ -23,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,6 +67,7 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
     private Button previousWeekButton;
     private Button nextWeekButton;
     private Button newEventAction;
+    private Button addAnotherMeal;
 
     DayMealAdapter dayMealAdapter;
 
@@ -80,7 +83,14 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_meal_plan, container, false);
         initWidgets(view);
-
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        boolean sharedPreferencesExists = !sharedPreferences.getAll().isEmpty();
+        if (sharedPreferencesExists) {
+            newEventAction = view.findViewById(R.id.newEventAction);
+            newEventAction.setVisibility(View.VISIBLE);
+        } else {
+            newEventAction.setVisibility(View.GONE);
+        }
         if (CalendarUtils.selectedDate == null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CalendarUtils.selectedDate = LocalDate.now(); // or any other appropriate initialization
@@ -97,6 +107,15 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
         previousWeekButton = view.findViewById(R.id.previousWeekAction);
         nextWeekButton = view.findViewById(R.id.nextWeekAction);
         newEventAction = view.findViewById(R.id.newEventAction);
+        addAnotherMeal= view.findViewById(R.id.btn_selectMeal);
+        addAnotherMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(v);
+                navController.popBackStack();
+                navController.navigate(R.id.navigation_home);
+            }
+        });
         newEventAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +169,7 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
     @Override
     public void onResume() {
         super.onResume();
+
         setEventAdapter();
     }
 
@@ -293,34 +313,28 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
 
     }
 
+
     public void addMealToDayMeals(String userId, DayMeal meal) {
-        Query query = FirebaseFirestore.getInstance()
+        CollectionReference dayMealsRef = FirebaseFirestore.getInstance()
                 .collection("users")
                 .document(userId)
-                .collection("dayMeals") .whereEqualTo("idMeal", meal.getIdMeal())
-                .limit(1);
-        query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot.isEmpty()) {
-                    CollectionReference favoriteMealsRef = FirebaseFirestore.getInstance().collection("users").document(userId).collection("dayMeals");
-                    favoriteMealsRef.add(meal).addOnSuccessListener(documentReference -> {
-                        if (isNetworkAvailable()) {
-                            fetchRemoteData();
-                            SnackbarUtils.showSnackbar(requireContext(),getView(),"Added");
-                        }
+                .collection("dayMeals");
+        dayMealsRef.add(meal)
+                .addOnSuccessListener(documentReference -> {
+                    if (isNetworkAvailable()) {
+                        fetchRemoteData();
+                        SnackbarUtils.showSnackbar(requireContext(),getView(),"Added");
+                    }
+                })
+                .addOnFailureListener(e -> {
 
-                    }).addOnFailureListener(e -> {
-
-                    });
-                } else {
-                }
-            } else {
-                MealsRepositoryImol.getInstance(
-                        MealsRemoteSourceDataImpl.getInstance(),
-                        MealsLocalDataSourceImpl.getInstance(getContext())
-                ).insertDayMeal(meal);
-            }
-        });
+                });
+    }
+    public void onPause() {
+        super.onPause();
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }

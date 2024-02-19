@@ -6,6 +6,8 @@ import com.example.foodzarella.categories.view.CategoryView;
 import com.example.foodzarella.network.ApiClient;
 import com.example.foodzarella.network.get_meals.MealQuery;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,21 +25,14 @@ public class CategoryPresenterImpl implements CategoryPresenter {
 
     @Override
     public void getCategories() {
-        categoryService.getCategories().enqueue(new Callback<CategoryResponse>() {
-            @Override
-            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
-                if (response.isSuccessful()) {
-                    List<Category> categories = response.body().getCategories();
+        categoryService.getCategories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(categoryResponse -> {
+                    List<Category> categories = categoryResponse.getCategories();
                     view.showCategories(categories);
-                } else {
-                    view.showError("Failed to fetch categories");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CategoryResponse> call, Throwable t) {
-                view.showError(t.getMessage());
-            }
-        });
+                }, throwable -> {
+                    view.showError(throwable.getMessage());
+                });
     }
 }

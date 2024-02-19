@@ -144,8 +144,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-    <!-- Add Meal Button -->
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    >
     <Button
         android:id="@+id/newEventAction"
         android:layout_width="wrap_content"
@@ -154,12 +157,25 @@
         style="@style/ButtonTextStyle"
         android:layout_margin="15dp"
         android:backgroundTint="@color/AppThem"
-        android:text="Add Meal"
+        android:text="Add Selected Meal"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <!-- Event List RecyclerView -->
+    <Button
+        android:id="@+id/btn_selectMeal"
+        style="@style/ButtonTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:backgroundTint="@color/AppThem"
+        android:text="Add Another Meal"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventListView"
         android:layout_width="match_parent"

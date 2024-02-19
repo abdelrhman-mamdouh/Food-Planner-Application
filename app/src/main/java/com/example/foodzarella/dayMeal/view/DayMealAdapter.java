@@ -1,6 +1,7 @@
 package com.example.foodzarella.dayMeal.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.foodzarella.R;
 import com.example.foodzarella.db.MealsLocalDataSource;
+import com.example.foodzarella.mealDetails.MealDetailsActivity;
 import com.example.foodzarella.model.DayMeal;
 import com.example.foodzarella.model.MealsRepositoryImol;
 import com.example.foodzarella.network.get_meals.MealsRemoteDataSource;
@@ -72,7 +74,14 @@ public class DayMealAdapter extends RecyclerView.Adapter<DayMealViewHolder> {
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.imageView);
 
-        holder.layout.setOnClickListener(view -> Toast.makeText(context, mealList.get(position).getStrMeal(), Toast.LENGTH_SHORT).show());
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MealDetailsActivity.class);
+                intent.putExtra("ID_KEY", currentMeal.getIdMeal());
+                context.startActivity(intent);
+            }
+        });
     }
 
     private void removeMealFromDayMeals(String userId, DayMeal currentMeal) {

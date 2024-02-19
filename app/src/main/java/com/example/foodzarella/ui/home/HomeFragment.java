@@ -78,8 +78,9 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
         categoryPresenter.getCategories();
 
         RecyclerView recyclerViewCountry = view.findViewById(R.id.recyclerView3);
-        GridLayoutManager gridLayoutManagerCountry = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        recyclerViewCountry.setLayoutManager(gridLayoutManagerCountry);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
+        linearLayoutManager2.setOrientation(RecyclerView.HORIZONTAL);
+        recyclerViewCountry.setLayoutManager(linearLayoutManager2);
         recyclerViewCountry.setHasFixedSize(true);
         countryPresenter = new CountryPresenter(this);
         countryAdapter = new CountryAdapter(new ArrayList<>(), getContext(), this);
@@ -91,6 +92,7 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
     public void showData(List<Meal> meals) {
         mealAdapter.setList(meals);
         mealAdapter.notifyDataSetChanged();
+        hideLoader();
     }
 
     @Override
@@ -105,6 +107,7 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
     public void showCategories(List<Category> categories) {
         gategoryAdapter.setList(categories);
         gategoryAdapter.notifyDataSetChanged();
+        hideLoader();
     }
 
     @Override
@@ -129,7 +132,6 @@ public class HomeFragment extends Fragment implements AllMealView, CategoryView,
         }
     }
     private boolean isDatasetEmpty() {
-
         if (mealAdapter != null) {
             return mealAdapter.getItemCount() == 0;
         }

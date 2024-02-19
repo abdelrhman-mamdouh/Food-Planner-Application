@@ -26,6 +26,7 @@ import com.example.foodzarella.allmeals.presenter.AllMealsPresenter;
 import com.example.foodzarella.allmeals.presenter.AllMealsPresenterImpl;
 import com.example.foodzarella.allmeals.view.AllMealView;
 import com.example.foodzarella.allmeals.view.MealAdapter;
+import com.example.foodzarella.allmeals.view.MealAdapterTwo;
 import com.example.foodzarella.db.MealsLocalDataSourceImpl;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
@@ -43,7 +44,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class SearchFragment extends Fragment implements AllMealView {
-    private MealAdapter mealAdapter;
+    private MealAdapterTwo mealAdapter;
     private AllMealsPresenter allMealsPresenter;
     String[] categories = {"Beef", "Chicken", "Dessert", "Lamb", "Miscellaneous", "Pasta", "Pork", "Seafood", "Side", "Starter", "Vegan", "Vegetarian", "Breakfast", "Goat"};
     String[] countries = {"American", "British", "Canadian", "Chinese", "Croatian", "Dutch", "Egyptian", "Filipino", "French", "Greek", "Indian", "Irish", "Italian", "Jamaican", "Japanese", "Kenyan", "Malaysian", "Mexican", "Moroccan", "Polish", "Portuguese", "Russian", "Spanish", "Thai", "Tunisian", "Turkish", "Unknown", "Vietnamese"};
@@ -169,7 +170,7 @@ public class SearchFragment extends Fragment implements AllMealView {
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManagerCountry = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManagerCountry);
-        mealAdapter = new MealAdapter(new ArrayList<>(), getContext(), MealsLocalDataSourceImpl.getInstance(requireContext()), MealsRemoteSourceDataImpl.getInstance());
+        mealAdapter = new MealAdapterTwo(new ArrayList<>(), getContext(), MealsLocalDataSourceImpl.getInstance(requireContext()), MealsRemoteSourceDataImpl.getInstance());
     }
 
     @Override

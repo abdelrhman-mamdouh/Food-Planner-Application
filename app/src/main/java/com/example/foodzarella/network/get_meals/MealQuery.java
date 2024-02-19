@@ -6,23 +6,22 @@ import com.example.foodzarella.categories.model.CategoryResponse;
 import com.example.foodzarella.country.model.MealCountriesResponse;
 import com.example.foodzarella.model.MealResponse;
 
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface MealQuery {
     @GET("filter.php")
-    Call<MealResponse> getMeals(@Query("i") String ingredient);
+    Single<MealResponse> getMeals(@Query("i") String ingredient);
     @GET("filter.php")
-    Call<MealResponse> getMealsByCategory(@Query("c") String category);
+    Single<MealResponse> getMealsByCategory(@Query("c") String category);
     @GET("filter.php")
-    Call<MealResponse> getMealsByCountry(@Query("a") String country);
+    Single<MealResponse> getMealsByCountry(@Query("a") String country);
 
     @GET("categories.php")
-    Call<CategoryResponse> getCategories();
+    Single<CategoryResponse> getCategories();
     @GET("list.php?a=list")
-    Call<MealCountriesResponse> getCountries();
+    Single<MealCountriesResponse> getCountries();
 
-    @GET("search.php")
-    Call<MealResponse> searchMeals(@Query("s") String query);
 }

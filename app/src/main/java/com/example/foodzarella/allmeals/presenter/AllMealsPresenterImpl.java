@@ -13,6 +13,8 @@ import com.example.foodzarella.network.get_meals.NetworkCallback;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,69 +22,50 @@ import retrofit2.Response;
 public class AllMealsPresenterImpl implements AllMealsPresenter, NetworkCallback {
     private AllMealView view;
     private MealsRepository repo;
-
+    private final MealQuery mealQuery;
     private String searchBy;
 public AllMealsPresenterImpl(AllMealView view, MealsRepository repo,String searchBy){
     this.view=view;
     this.repo=repo;
     this.searchBy =searchBy;
+    this.mealQuery = ApiClient.getClient().create(MealQuery.class);
 }
     @Override
     public void getMeals() {
-
-        Call<MealResponse> call =ApiClient.getClient().create(MealQuery.class).getMeals("");
-        call.enqueue(new Callback<MealResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MealResponse> call, @NonNull Response<MealResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Meal> mealList = response.body().getMeals();
+        mealQuery.getMeals("")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealResponse -> {
+                    List<Meal> mealList = mealResponse.getMeals();
                     view.showData(mealList);
-                }
-            }
-            @Override
-            public void onFailure(@NonNull Call<MealResponse> call, @NonNull Throwable throwable) {
-                view.showErrMsg("Failed to fetch meals");
-            }
-        });
-    }
-
-    @Override
-    public void getMealsByCategory() {
-        Call<MealResponse> callCategory = ApiClient.getClient().create(MealQuery.class).getMealsByCategory(searchBy);
-        callCategory.enqueue(new Callback<MealResponse>() {
-            @Override
-            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Meal> mealList = response.body().getMeals();
-                    view.showData(mealList);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealResponse> call, Throwable throwable) {
-                view.showErrMsg("Failed to fetch categories");
-            }
-        });
+                }, throwable -> {
+                    view.showErrMsg("Failed to fetch meals");
+                });
     }
 
     @Override
     public void getMealsByCountry() {
-        Call<MealResponse> callCountry = ApiClient.getClient().create(MealQuery.class).getMealsByCountry(searchBy);
-        callCountry.enqueue(new Callback<MealResponse>() {
-            @Override
-            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Meal> mealList = response.body().getMeals();
+        mealQuery.getMealsByCountry(searchBy)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealResponse -> {
+                    List<Meal> mealList = mealResponse.getMeals();
                     view.showData(mealList);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealResponse> call, Throwable throwable) {
-                view.showErrMsg("Failed to fetch categories");
-            }
-        });
-
+                }, throwable -> {
+                    view.showErrMsg("Failed to fetch categories");
+                });
+    }
+    @Override
+    public void getMealsByCategory() {
+        mealQuery.getMealsByCategory(searchBy)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealResponse -> {
+                    List<Meal> mealList = mealResponse.getMeals();
+                    view.showData(mealList);
+                }, throwable -> {
+                    view.showErrMsg("Failed to fetch categories");
+                });
     }
 
     @Override

@@ -107,6 +107,12 @@ public class FavoritesFragment extends Fragment implements FavMealView {
                 public void onMealsLoaded(List<Meal> meals) {
                     favAdapter.setList(meals);
                     favAdapter.notifyDataSetChanged();
+                    RxTextView.textChanges(searchEditText)
+                            .debounce(100, TimeUnit.MILLISECONDS)
+                            .map(text -> text.toString())
+                            .subscribe(text -> {
+                                filterType(text, meals);
+                            });
                     hideLoader();
                 }
 

@@ -39,7 +39,7 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
-public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
+public class MealAdapterTwo extends RecyclerView.Adapter<ViewHolderMeals> {
     private List<Meal> mealList;
     private final Context context;
     boolean isFavorite;
@@ -50,7 +50,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     String userId;
-    public MealAdapter(List<Meal> mealList, Context context, MealsLocalDataSource localDataSource, MealsRemoteDataSource remoteDataSource) {
+    public MealAdapterTwo(List<Meal> mealList, Context context, MealsLocalDataSource localDataSource, MealsRemoteDataSource remoteDataSource) {
         this.mealList = mealList;
         this.context = context;
         this.mealsLocalDataSource = localDataSource;
@@ -62,7 +62,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     @NonNull
     @Override
     public ViewHolderMeals onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.meal_item3, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.meal_item2, parent, false);
         return new ViewHolderMeals(view);
     }
 
@@ -246,7 +246,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         });
     }
 
-public interface OnFavoriteMealExistenceCheckedListener {
-    void onFavoriteMealExistenceChecked(boolean mealExists);
-}
+    public interface OnFavoriteMealExistenceCheckedListener {
+        void onFavoriteMealExistenceChecked(boolean mealExists);
+    }
 }

@@ -8,6 +8,8 @@ import com.example.foodzarella.network.get_meals.MealQuery;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,22 +24,14 @@ public class CountryPresenter {
     }
 
     public void getCountries() {
-        categoryService.getCountries().enqueue(new Callback<MealCountriesResponse>() {
-            @Override
-            public void onResponse(Call<MealCountriesResponse> call, Response<MealCountriesResponse> response) {
-                if (response.isSuccessful()) {
-                    List<MealCountry> countries = response.body().getCountries();
+        categoryService.getCountries()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealCountriesResponse -> {
+                    List<MealCountry> countries = mealCountriesResponse.getCountries();
                     view.showCountries(countries);
-                } else {
-                    view.showError("Failed to fetch categories");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealCountriesResponse> call, Throwable t) {
-                view.showError(t.getMessage());
-            }
-        });
+                }, throwable -> {
+                    view.showError(throwable.getMessage());
+                });
     }
-
 }
