@@ -13,6 +13,8 @@ import com.example.foodzarella.model.Meal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 
 @Dao
 public interface MealDAO {
@@ -26,8 +28,8 @@ public interface MealDAO {
     void delete(Meal meal);
 
     @Query("SELECT * FROM meal_table")
-     LiveData<List<Meal>> getAllMeals();
+    Flowable<List<Meal>> getAllMeals();
     @Query("SELECT EXISTS (SELECT 1 FROM meal_table WHERE meal_id = :mealId)")
-    LiveData<Boolean> isMealExists(String mealId);
+    Flowable<Boolean> isMealExists(String mealId);
 
 }

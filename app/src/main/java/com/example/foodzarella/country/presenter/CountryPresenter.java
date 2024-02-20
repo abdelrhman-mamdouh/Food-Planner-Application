@@ -1,18 +1,14 @@
 package com.example.foodzarella.country.presenter;
 
 import com.example.foodzarella.country.view.CountryView;
-import com.example.foodzarella.country.model.MealCountriesResponse;
 import com.example.foodzarella.country.model.MealCountry;
 import com.example.foodzarella.network.ApiClient;
-import com.example.foodzarella.network.get_meals.MealQuery;
+import com.example.foodzarella.network.getMeals.MealQuery;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CountryPresenter {
     private CountryView view;

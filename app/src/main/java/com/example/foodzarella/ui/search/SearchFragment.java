@@ -12,25 +12,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodzarella.R;
-import com.example.foodzarella.allmeals.presenter.AllMealsPresenter;
-import com.example.foodzarella.allmeals.presenter.AllMealsPresenterImpl;
-import com.example.foodzarella.allmeals.view.AllMealView;
-import com.example.foodzarella.allmeals.view.MealAdapter;
-import com.example.foodzarella.allmeals.view.MealAdapterTwo;
+import com.example.foodzarella.allMeals.presenter.AllMealsPresenter;
+import com.example.foodzarella.allMeals.presenter.AllMealsPresenterImpl;
+import com.example.foodzarella.allMeals.view.AllMealView;
+import com.example.foodzarella.allMeals.view.MealAdapterTwo;
 import com.example.foodzarella.db.MealsLocalDataSourceImpl;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
-import com.example.foodzarella.network.get_meals.MealsRemoteSourceDataImpl;
+import com.example.foodzarella.network.getMeals.MealsRemoteSourceDataImpl;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
@@ -47,7 +44,7 @@ public class SearchFragment extends Fragment implements AllMealView {
     private MealAdapterTwo mealAdapter;
     private AllMealsPresenter allMealsPresenter;
     String[] categories = {"Beef", "Chicken", "Dessert", "Lamb", "Miscellaneous", "Pasta", "Pork", "Seafood", "Side", "Starter", "Vegan", "Vegetarian", "Breakfast", "Goat"};
-    String[] countries = {"American", "British", "Canadian", "Chinese", "Croatian", "Dutch", "Egyptian", "Filipino", "French", "Greek", "Indian", "Irish", "Italian", "Jamaican", "Japanese", "Kenyan", "Malaysian", "Mexican", "Moroccan", "Polish", "Portuguese", "Russian", "Spanish", "Thai", "Tunisian", "Turkish", "Unknown", "Vietnamese"};
+    String[] countries = {"American", "British", "Canadian", "Chinese", "Croatian", "Dutch", "Egyptian", "Filipino", "French", "Greek", "Indian", "Irish", "Italian", "Jamaican", "Japanese", "Kenyan", "Malaysian", "Mexican", "Moroccan", "Polish", "Portuguese", "Russian", "Spanish", "Thai", "Tunisian", "Turkish", "Vietnamese"};
 
     AutoCompleteTextView autoCompleteTxt;
     ArrayAdapter<String> adapterItems;

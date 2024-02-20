@@ -9,6 +9,8 @@ import com.example.foodzarella.model.MealsRepository;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public class DayPresenterImpl implements DayMealsPresenter {
     private DayMealView _view;
     private MealsLocalDataSource mealsLocalDataSource;
@@ -19,12 +21,12 @@ public class DayPresenterImpl implements DayMealsPresenter {
         this.repo=repo;
     }
     @Override
-    public LiveData<List<DayMeal>> getMeals() {
+    public Flowable<List<DayMeal>> getMeals() {
         return repo.getDayMealList();
     }
 
     @Override
-    public LiveData<List<DayMeal>> getMealsByDate(String selectedDate) {
+    public Flowable<List<DayMeal>> getMealsByDate(String selectedDate) {
         return repo.getDayMealListByDate(selectedDate);
     }
 

@@ -7,11 +7,13 @@ import com.example.foodzarella.model.Meal;
 
 import java.util.List;
 
-public interface MealsLocalDataSource {
-    LiveData<List<Meal>> getMealList();
+import io.reactivex.rxjava3.core.Flowable;
 
-    LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate);
-    LiveData<List<DayMeal>> getDayMealList();
+public interface MealsLocalDataSource {
+    Flowable<List<Meal>> getMealList();
+
+    Flowable<List<DayMeal>> getDayMealListByDate(String selectedDate);
+    Flowable<List<DayMeal>> getDayMealList();
 
     void delete(Meal meal);
 
@@ -21,6 +23,6 @@ public interface MealsLocalDataSource {
 
     void insertDayMeal(DayMeal meal);
 
-    LiveData<Boolean> isMealExists(String mealId);
+    Flowable<Boolean> isMealExists(String mealId);
 
 }

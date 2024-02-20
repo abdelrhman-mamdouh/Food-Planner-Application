@@ -7,7 +7,7 @@
     android:background="@drawable/gradient_three"
     android:orientation="vertical"
 
-    tools:context=".ui.mealPlan.MealPlanFragment">
+    tools:context=".dayMeal.view.mealPlan.MealPlanFragment">
 
     <!-- Header Section -->
     <LinearLayout
@@ -70,7 +70,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SUN"
+                android:text="@string/sun"
                 style="@style/TextViewStyle"
                 android:textColor="@color/white"
                 android:textAlignment="center"
@@ -80,7 +80,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="MON"
+                android:text="@string/mon"
 
                 style="@style/TextViewStyle"
                 android:textColor="@color/white"
@@ -91,7 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TUE"
+                android:text="@string/tue"
                 style="@style/TextViewStyle"
                 android:textColor="@color/white"
                 android:textAlignment="center"
@@ -101,7 +101,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="WED"
+                android:text="@string/wed"
                 style="@style/TextViewStyle"
                 android:textAlignment="center"
                 android:textSize="16sp"/>
@@ -110,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="THUR"
+                android:text="@string/thur"
                 style="@style/TextViewStyle"
                 android:textAlignment="center"
                 android:textSize="16sp"/>
@@ -119,7 +119,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="FRI"
+                android:text="@string/fri"
                 style="@style/TextViewStyle"
                 android:textAlignment="center"
                 android:textSize="16sp"/>
@@ -128,7 +128,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SAT"
+                android:text="@string/sat"
                 style="@style/TextViewStyle"
                 android:textAlignment="center"
                 android:textSize="16sp"/>
@@ -157,7 +157,7 @@
         style="@style/ButtonTextStyle"
         android:layout_margin="15dp"
         android:backgroundTint="@color/AppThem"
-        android:text="Add Selected Meal"
+        android:text="@string/add_selected_meal"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -170,7 +170,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:backgroundTint="@color/AppThem"
-        android:text="Add Another Meal"
+        android:text="@string/add_another_meal"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />

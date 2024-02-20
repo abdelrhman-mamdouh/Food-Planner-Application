@@ -1,16 +1,12 @@
 package com.example.foodzarella.categories.presenter;
 
 import com.example.foodzarella.categories.model.Category;
-import com.example.foodzarella.categories.model.CategoryResponse;
 import com.example.foodzarella.categories.view.CategoryView;
 import com.example.foodzarella.network.ApiClient;
-import com.example.foodzarella.network.get_meals.MealQuery;
+import com.example.foodzarella.network.getMeals.MealQuery;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.List;
 

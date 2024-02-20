@@ -20,6 +20,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodzarella.R;
 import com.example.foodzarella.country.model.MealCountry;
 
@@ -49,10 +50,16 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MealCountry item = countryItems.get(position);
         holder.categoryNameTextView.setText(item.getStrCountry());
-        String countryName = item.getStrCountry();
-        String flagEmoji = getFlagEmoji(countryName); // Convert the flag emoji to drawable
-        Drawable flagDrawable = getDrawableFromEmoji(flagEmoji, holder.itemView);
-        holder.flagView.setImageDrawable(flagDrawable);
+        if(item.getStrCountry().equals("Unknown")){
+            holder.categoryNameTextView.setText("Aruba");
+        }
+        String countryName =getCountryCode(item.getStrCountry());
+        String flagUrl = "https://flagsapi.com/"+countryName+"/flat/64.png";
+
+        Glide.with(context)
+                .load(flagUrl)
+                .into(holder.flagView);
+
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,80 +97,68 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
             flagView= itemView.findViewById(R.id.imageViewGategory);
         }
     }
-    private Drawable getDrawableFromEmoji(String emoji, View itemView) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTextSize(48);
-        paint.setTextAlign(Paint.Align.LEFT);
-        int width = (int) paint.measureText(emoji);
-        int height = (int) (-paint.ascent() + paint.descent());
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawText(emoji, 0, -paint.ascent(), paint);
-        return new BitmapDrawable(itemView.getResources(), bitmap);
-    }
 
 
-    private String getFlagEmoji(String countryName) {
-        switch (countryName.toLowerCase()) {
-            case "american":
-                return "\uD83C\uDDFA\uD83C\uDDF8";
-            case "british":
-                return "\uD83C\uDDEC\uD83C\uDDE7";
-            case "canadian":
-                return "\uD83C\uDDE8\uD83C\uDDE6";
-            case "chinese":
-                return "\uD83C\uDDE8\uD83C\uDDF3";
-            case "croatian":
-                return "\uD83C\uDDED\uD83C\uDDF7";
-            case "dutch":
-                return "\uD83C\uDDF3\uD83C\uDDF1";
-            case "egyptian":
-                return "\uD83C\uDDEA\uD83C\uDDEC";
-            case "filipino":
-                return "\uD83C\uDDEB\uD83C\uDDEE";
-            case "french":
-                return "\uD83C\uDDEB\uD83C\uDDF7";
-            case "greek":
-                return "\uD83C\uDDEC\uD83C\uDDF7";
-            case "indian":
-                return "\uD83C\uDDEE\uD83C\uDDF3";
-            case "irish":
-                return "\uD83C\uDDEE\uD83C\uDDEA";
-            case "italian":
-                return "\uD83C\uDDEE\uD83C\uDDF9";
-            case "jamaican":
-                return "\uD83C\uDDEF\uD83C\uDDF2";
-            case "japanese":
-                return "\uD83C\uDDEF\uD83C\uDDF5";
-            case "kenyan":
-                return "\uD83C\uDDF0\uD83C\uDDF2";
-            case "malaysian":
-                return "\uD83C\uDDF2\uD83C\uDDFE";
-            case "mexican":
-                return "\uD83C\uDDF2\uD83C\uDDFD";
-            case "moroccan":
-                return "\uD83C\uDDF2\uD83C\uDDE6";
-            case "polish":
-                return "\uD83C\uDDF5\uD83C\uDDF1";
-            case "portuguese":
-                return "\uD83C\uDDF5\uD83C\uDDF9";
-            case "russian":
-                return "\uD83C\uDDF7\uD83C\uDDFA";
-            case "spanish":
-                return "\uD83C\uDDEA\uD83C\uDDF8";
-            case "thai":
-                return "\uD83C\uDDF9\uD83C\uDDED";
-            case "tunisian":
-                return "\uD83C\uDDF9\uD83C\uDDF3";
-            case "turkish":
-                return "\uD83C\uDDF9\uD83C\uDDF7";
-            case "palastine":
-                return "\uD83C\uDDF5\uD83C\uDDF8";
-            case "vietnamese":
-                return "\uD83C\uDDFB\uD83C\uDDF3";
+    private static String getCountryCode(String countryName) {
+        switch (countryName) {
+            case "American":
+                return "US";
+            case "British":
+                return "GB";
+            case "Canadian":
+                return "CA";
+            case "Chinese":
+                return "CN";
+            case "Croatian":
+                return "HR";
+            case "Dutch":
+                return "NL";
+            case "Egyptian":
+                return "EG";
+            case "Filipino":
+                return "PH";
+            case "French":
+                return "FR";
+            case "Greek":
+                return "GR";
+            case "Indian":
+                return "IN";
+            case "Irish":
+                return "IE";
+            case "Italian":
+                return "IT";
+            case "Jamaican":
+                return "JM";
+            case "Japanese":
+                return "JP";
+            case "Kenyan":
+                return "KE";
+            case "Malaysian":
+                return "MY";
+            case "Mexican":
+                return "MX";
+            case "Moroccan":
+                return "MA";
+            case "Polish":
+                return "PL";
+            case "Portuguese":
+                return "PT";
+            case "Russian":
+                return "RU";
+            case "Spanish":
+                return "ES";
+            case "Thai":
+                return "TH";
+            case "Tunisian":
+                return "TN";
+            case "Turkish":
+                return "TR";
+            case "Unknown":
+                return "AW"; // Replace "XX" with the appropriate code for "Unknown"
+            case "Vietnamese":
+                return "VN";
             default:
-                return "\uD83C\uDDF5\uD83C\uDDF8";
+                return null; // Unknown country code
         }
     }
-
 }

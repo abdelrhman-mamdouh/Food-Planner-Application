@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">طعامزاريلا</string>
+    <string name="intro">اطبخ بثقة</string>
+    <string name="google_login">تسجيل الدخول عبر جوجل</string>
+    <string name="Guest">ضيف</string>
+    <string name="email_login">سجل عن طريق البريد الإلكتروني</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">مرحبا جزء فارغ</string>
+    <string name="log_in">تسجيل الدخول</string>
+    <string name="name">اسم</string>
+    <string name="email">بريد إلكتروني</string>
+    <string name="password">كلمة المرور</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="sign_up">اشتراك</string>
+    <string name="login_welcome">مرحبًا بعودتك! أنت على بعد نقرة واحدة من شيء لذيذ</string>
+    <string name="todo">الجميع</string>
+    <string name="logIn">تسجيل الدخول</string>
+    <string name="default_web_client_id">123.apps.googleusercontent.com</string>
+    <string name="sigUp_intro">احفظ الوجبات اللذيذة واحصل على محتوى مخصص</string>
+    <string name="title_activity_home">نشاط المنزل</string>
+    <string name="title_home">بيت</string>
+    <string name="title_search">يبحث</string>
+    <string name="title_notifications">إشعارات</string>
+    <string name="title_favorite">المفضلة</string>
+    <string name="title_activity_profile">حساب تعريفي</string>
+    <string name="navigation_drawer_open">افتح درج التنقل</string>
+    <string name="navigation_drawer_close">إغلاق درج التنقل</string>
+    <string name="nav_header_title">بيئة تطوير أندرويد</string>
+    <string name="nav_header_subtitle">android.studio\@android.com</string>
+    <string name="nav_header_desc">رأس التنقل</string>
+    <string name="action_settings">إعدادات</string>
+    <string name="select">يختار</string>
+    <string name="menu_home">بيت</string>
+    <string name="menu_gallery">صالة عرض</string>
+    <string name="menu_slideshow">عرض الشرائح</string>
+    <string name="log_out">تسجيل خروج</string>
+    <string name="meal_name">اسم الوجبة</string>
+    <string name="category">فئة</string>
+    <string name="area">منطقة</string>
+    <string name="measure">يقيس</string>
+    <string name="ingredients">مكونات</string>
+
+
+    <string name="facebook_app_id">1234</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">56789</string>
+    <string name="category_name">اسم التصنيف</string>
+    <string name="description">وصف</string>
+    <string name="daily_inspiration">الإلهام اليومي</string>
+    <string name="categories">فئات</string>
+    <string name="country">دولة</string>
+    <string name="search">يبحث</string>
+    <string name="ingredient">المكونات</string>
+    <string name="title_meal_plan">خطة الوجبة</string>
+
+    <string name="back"><![CDATA[<]]></string>
+    <string name="forward"><![CDATA[>]]></string>
+    <string name="instructions">تعليمات</string>
+    <string name="add_selected_meal">إضافة وجبة مختارة</string>
+    <string name="add_another_meal">أضف وجبة أخرى</string>
+    <string name="sun">الاحد</string>
+    <string name="mon">الأثنين</string>
+    <string name="tue">الثلاثاء</string>
+    <string name="wed">الاربعاء</string>
+    <string name="thur">الخميس</string>
+    <string name="fri">الجمعة</string>
+    <string name="sat">السبت</string>
+    <string name="already_have_an_accout_log_in">هل لديك حساب بالفعل؟ تسجيل الدخول</string>
+
+
+</resources>

@@ -1,14 +1,13 @@
 package com.example.foodzarella.model;
 
-import androidx.lifecycle.LiveData;
-
-
 
 import com.example.foodzarella.db.MealsLocalDataSource;
-import com.example.foodzarella.network.get_meals.MealsRemoteDataSource;
-import com.example.foodzarella.network.get_meals.NetworkCallback;
+import com.example.foodzarella.network.getMeals.MealsRemoteDataSource;
+import com.example.foodzarella.network.getMeals.NetworkCallback;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Flowable;
 
 
 public class MealsRepositoryImol implements MealsRepository {
@@ -28,17 +27,17 @@ public class MealsRepositoryImol implements MealsRepository {
     }
 
 
-    public LiveData<List<Meal>> getMealList() {
+    public Flowable<List<Meal>> getMealList() {
         return mealsLocalDataSource.getMealList();
     }
 
     @Override
-    public LiveData<List<DayMeal>> getDayMealList() {
+    public Flowable<List<DayMeal>> getDayMealList() {
         return mealsLocalDataSource.getDayMealList();
     }
 
     @Override
-    public LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate) {
+    public Flowable<List<DayMeal>> getDayMealListByDate(String selectedDate) {
         return mealsLocalDataSource.getDayMealListByDate(selectedDate);
     }
 

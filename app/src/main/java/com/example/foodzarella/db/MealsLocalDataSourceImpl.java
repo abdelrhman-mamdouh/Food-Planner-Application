@@ -10,12 +10,14 @@ import com.example.foodzarella.model.Meal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public class MealsLocalDataSourceImpl implements MealsLocalDataSource {
     private MealDAO mealDAO;
-    private LiveData<List<Meal>> mealList;
+    private Flowable<List<Meal>> mealList;
 
     private DayMealDao dayMealDao;
-    private LiveData<List<DayMeal>> dayMealsList;
+    private Flowable<List<DayMeal>> dayMealsList;
 
     public static MealsLocalDataSource mealsLocalDataSource = null;
 
@@ -35,18 +37,18 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource {
     }
 
     @Override
-    public LiveData<List<Meal>> getMealList() {
+    public Flowable<List<Meal>> getMealList() {
         return mealList;
     }
 
     @Override
-    public LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate) {
+    public Flowable<List<DayMeal>> getDayMealListByDate(String selectedDate) {
         return dayMealDao.getDayMealListByDate(selectedDate);
         }
 
 
     @Override
-    public LiveData<List<DayMeal>> getDayMealList() {
+    public Flowable<List<DayMeal>> getDayMealList() {
         return dayMealsList;
     }
 
@@ -92,7 +94,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource {
 
 
     @Override
-    public LiveData<Boolean> isMealExists(String mealId) {
+    public Flowable<Boolean> isMealExists(String mealId) {
         return mealDAO.isMealExists(mealId);
     }
 

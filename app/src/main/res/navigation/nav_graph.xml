@@ -20,7 +20,7 @@
         tools:layout="@layout/log_in_frament" />
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.example.foodzarella.AuthFragment"
+        android:name="com.example.foodzarella.auth.AuthFragment"
         android:label="Start"
         tools:layout="@layout/fragment_auth">
         <action

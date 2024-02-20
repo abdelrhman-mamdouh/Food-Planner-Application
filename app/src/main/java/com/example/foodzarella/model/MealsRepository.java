@@ -1,19 +1,18 @@
 package com.example.foodzarella.model;
 
-import androidx.lifecycle.LiveData;
 
-
-
-import com.example.foodzarella.network.get_meals.NetworkCallback;
+import com.example.foodzarella.network.getMeals.NetworkCallback;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public interface MealsRepository {
-    public LiveData<List<Meal>> getMealList() ;
+    public Flowable<List<Meal>> getMealList() ;
 
-    public LiveData<List<DayMeal>> getDayMealList() ;
+    public Flowable<List<DayMeal>> getDayMealList() ;
 
-    public LiveData<List<DayMeal>> getDayMealListByDate(String selectedDate) ;
+    public Flowable<List<DayMeal>> getDayMealListByDate(String selectedDate) ;
     void getAllMeals(NetworkCallback networkCallback,String category);
 
     void delete(Meal product);

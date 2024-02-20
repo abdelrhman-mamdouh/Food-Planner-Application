@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_favorites"
-        android:name="com.example.foodzarella.ui.favorites.FavoritesFragment"
+        android:name="com.example.foodzarella.favMeals.view.favorites.FavoritesFragment"
         android:label="@string/title_favorite"
         tools:layout="@layout/fragment_favorites" />
     <fragment
@@ -34,7 +34,7 @@
         tools:layout="@layout/fragment_log_out" />
     <fragment
         android:id="@+id/navigation_meal_plan"
-        android:name="com.example.foodzarella.ui.mealPlan.MealPlanFragment"
+        android:name="com.example.foodzarella.dayMeal.view.mealPlan.MealPlanFragment"
         android:label="Meal Plan"
         tools:layout="@layout/fragment_navigation_meal_plan" />
 </navigation>

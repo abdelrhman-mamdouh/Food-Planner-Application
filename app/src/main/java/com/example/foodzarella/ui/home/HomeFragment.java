@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.foodzarella.allmeals.presenter.AllMealsPresenter;
-import com.example.foodzarella.allmeals.presenter.AllMealsPresenterImpl;
-import com.example.foodzarella.allmeals.view.AllMealView;
-import com.example.foodzarella.allmeals.view.MealAdapter;
+import com.example.foodzarella.allMeals.presenter.AllMealsPresenter;
+import com.example.foodzarella.allMeals.presenter.AllMealsPresenterImpl;
+import com.example.foodzarella.allMeals.view.AllMealView;
+import com.example.foodzarella.allMeals.view.MealAdapter;
 import com.example.foodzarella.categories.model.Category;
 import com.example.foodzarella.categories.presenter.CategoryPresenterImpl;
 import com.example.foodzarella.categories.view.CategoryView;
@@ -27,7 +27,7 @@ import com.example.foodzarella.country.model.MealCountry;
 import com.example.foodzarella.db.MealsLocalDataSourceImpl;
 import com.example.foodzarella.model.Meal;
 import com.example.foodzarella.model.MealsRepositoryImol;
-import com.example.foodzarella.network.get_meals.MealsRemoteSourceDataImpl;
+import com.example.foodzarella.network.getMeals.MealsRemoteSourceDataImpl;
 import com.example.foodzarella.R;
 
 import java.util.ArrayList;

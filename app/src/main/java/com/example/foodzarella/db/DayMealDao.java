@@ -12,6 +12,9 @@ import com.example.foodzarella.model.DayMeal;
 import com.example.foodzarella.model.Meal;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Flowable;
+
 @Dao
 public interface DayMealDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -23,7 +26,7 @@ public interface DayMealDao {
     @Delete
     void delete(DayMeal meal);
     @Query("SELECT * FROM day_meal_table")
-    LiveData<List<DayMeal>> getAllDayMeals();
+    Flowable<List<DayMeal>> getAllDayMeals();
     @Query("SELECT * FROM day_meal_table WHERE meal_date = :date")
-    LiveData<List<DayMeal>> getDayMealListByDate(String date);
+    Flowable<List<DayMeal>> getDayMealListByDate(String date);
 }

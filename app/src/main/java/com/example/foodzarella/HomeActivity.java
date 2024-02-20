@@ -55,12 +55,16 @@ public class HomeActivity extends AppCompatActivity implements ConnectivityRecei
     private Toolbar myToolbar;
     private SharedPreferences sharedPreferences;
     private FirebaseAuth mAuth;
+    static NavController navController;
     private ConnectivityReceiver connectivityReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+
+
         connectivityReceiver = new ConnectivityReceiver();
         connectivityReceiver.setListener(this);
 
@@ -79,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements ConnectivityRecei
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_home);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_home);
         NavigationUI.setupWithNavController(navigationView, navController);
         setupNavigation();
 
@@ -161,11 +165,20 @@ public class HomeActivity extends AppCompatActivity implements ConnectivityRecei
         if (currentUser != null) {
             String email = currentUser.getEmail();
             String name = currentUser.getDisplayName();
-            userNameTextView.setText(name);
-            if(name.equals("")){
+            boolean isAnonymous = currentUser.isAnonymous();
+            if (isAnonymous) {
+                userNameTextView.setText("Guest");
+                emailTextView.setText("Gust User");
+            } else {
+
+
+            if (name == null || name.equals("")) {
                 String[] parts = email.split("@");
                 String cutName = parts[0];
                 userNameTextView.setText(cutName);
+            }
+            else{
+                userNameTextView.setText(name);
             }
 
             emailTextView.setText(email);
@@ -182,20 +195,25 @@ public class HomeActivity extends AppCompatActivity implements ConnectivityRecei
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                         .into(profileImageView);
             } else {
-                // Handle case where photoUri is null or empty
-                // For example, you can load a default placeholder image
+
                 Glide.with(getBaseContext())
                         .load(R.drawable.logo_one)
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                         .into(profileImageView);
             }
         }
-    }
+    }}
 
     @Override
     protected void onStop() {
         super.onStop();
 //        unregisterReceiver(connectivityReceiver);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(connectivityReceiver, intentFilter);
     }
 
     @Override
