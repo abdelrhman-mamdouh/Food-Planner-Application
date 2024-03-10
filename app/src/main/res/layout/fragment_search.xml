@@ -60,7 +60,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipIngredient"
-                    android:layout_margin="15dp"
+                    android:layout_margin="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
@@ -68,7 +68,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipCategory"
-                    android:layout_margin="15dp"
+                    android:layout_margin="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"

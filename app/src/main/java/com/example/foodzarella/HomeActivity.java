@@ -215,7 +215,11 @@ public class HomeActivity extends AppCompatActivity implements ConnectivityRecei
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(connectivityReceiver, intentFilter);
     }
-
+    public void navigateToMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
 

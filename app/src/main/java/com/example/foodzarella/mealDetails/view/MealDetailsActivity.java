@@ -1,23 +1,17 @@
 package com.example.foodzarella.mealDetails.view;
 
-import static android.app.PendingIntent.getActivity;
 import static com.example.foodzarella.SnackbarUtils.showSnackbar;
-import static com.example.foodzarella.db.MealsLocalDataSourceImpl.mealsLocalDataSource;
-
 import static java.security.AccessController.getContext;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -28,13 +22,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.foodzarella.HomeActivity;
+
 import com.example.foodzarella.MainActivity;
 import com.example.foodzarella.R;
-import com.example.foodzarella.SnackbarUtils;
 import com.example.foodzarella.allMeals.view.MealAdapter;
-import com.example.foodzarella.allMeals.view.ViewHolderMeals;
-import com.example.foodzarella.dayMeal.view.mealPlan.MealPlanFragment;
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.db.MealsLocalDataSourceImpl;
 import com.example.foodzarella.mealDetails.model.MealDetails;
@@ -102,7 +93,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         if (mealJson != null) {
             Gson gson = new Gson();
             mealFav = gson.fromJson(mealJson, Meal.class);
-
         }
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -110,14 +100,43 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isFavorite) {
-                    removeMealFromFavorites(userId, mealFav);
-                    showSnackbar(getApplicationContext(), v, "Meal removed from favorites");
+                if (!currentUser.isAnonymous()) {
+                    if (isFavorite) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MealDetailsActivity.this);
+                        builder.setMessage("Are you sure you want to remove this meal from favorites?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                removeMealFromFavorites(userId, mealFav);
+                                showSnackbar(MealDetailsActivity.this, v, "Meal removed from favorites");
+                                isFavorite = false;
+                            }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                    } else {
+                        addMealToFavorites(userId, mealFav);
+                        showSnackbar(getBaseContext(), v, "Meal added to favorites");
+                        isFavorite = true;
+                    }
                 } else {
-                    addMealToFavorites(userId, mealFav);
-                    showSnackbar(getApplicationContext(), v, "Meal added to favorites");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MealDetailsActivity.this);
+                    builder.setMessage("You need to sign in to add meals to favorites. Do you want to sign in?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(MealDetailsActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            mAuth.signOut();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
                 }
-                isFavorite = !isFavorite;
             }
         });
         if (isNetworkAvailable()) {
@@ -149,12 +168,8 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("meal", mealJson);
                 editor.apply();
-                
             }
         });
-
-
-
     mealId = getIntent().getStringExtra("ID_KEY");
         imageViewHero = findViewById(R.id.imageview_hero);
         tvArea = findViewById(R.id.tv_area);
@@ -357,8 +372,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 .document(userId)
                 .collection("favoriteMeals")
                 .whereEqualTo("idMeal", meal.getIdMeal())
-                .limit(1); // Limit to 1 document since we only need to check existence
-
+                .limit(1);
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 boolean mealExists = !task.getResult().isEmpty();
@@ -368,7 +382,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
             }
         });
     }
-
     private void fetchLocalData(Meal meal) {
         mealsLocalDataSource.isMealExists(meal.getIdMeal())
                 .subscribeOn(Schedulers.io())

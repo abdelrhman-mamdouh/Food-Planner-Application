@@ -1,6 +1,8 @@
 package com.example.foodzarella.dayMeal.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.foodzarella.MainActivity;
 import com.example.foodzarella.R;
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.mealDetails.view.MealDetailsActivity;
@@ -59,12 +62,45 @@ public class DayMealAdapter extends RecyclerView.Adapter<DayMealViewHolder> {
         userId = currentUser.getUid();
 
         holder.remove.setOnClickListener(v -> {
-            if (isNetworkAvailable()) {
-                removeMealFromDayMeals(userId, currentMeal);
-            } else
-                MealsRepositoryImol.getInstance(mealsRemoteDataSource,mealsLocalDataSource).deleteDayMeal(currentMeal);
-
+            if(!currentUser.isAnonymous()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure you want to remove this meal?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (isNetworkAvailable()) {
+                                    removeMealFromDayMeals(userId, currentMeal);
+                                } else {
+                                    MealsRepositoryImol.getInstance(mealsRemoteDataSource, mealsLocalDataSource).deleteDayMeal(currentMeal);
+                                }
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing, simply dismiss the dialog
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("You need to sign in to remove meal from favorites. Do you want to sign in?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(context, MainActivity.class);
+                        context.startActivity(intent);
+                        mAuth.signOut();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
         });
+
 
         String url = currentMeal.getStrMealThumb();
         Glide.with(context)

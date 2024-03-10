@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodzarella.R;
 import com.example.foodzarella.databinding.FragmentFavoritesBinding;
 import com.example.foodzarella.db.MealsLocalDataSource;
@@ -58,7 +59,7 @@ public class FavoritesFragment extends Fragment implements FavMealView {
     private EditText searchEditText;
     private ProgressBar loader;
 
-
+    LottieAnimationView backgroundAnimationView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class FavoritesFragment extends Fragment implements FavMealView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         searchEditText = view.findViewById(R.id.search_food);
-        loader = view.findViewById(R.id.loader);
+        backgroundAnimationView = view.findViewById(R.id.loaderss);
         recyclerView = binding.recyclerViewFav;
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
@@ -113,12 +114,16 @@ public class FavoritesFragment extends Fragment implements FavMealView {
                             .subscribe(text -> {
                                 filterType(text, meals);
                             });
-                    hideLoader();
+                    if (isDatasetEmpty()) {
+                        showLoader();
+                    } else {
+                        hideLoader();
+                        favAdapter.notifyDataSetChanged();
+                    }
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-                    // Handle failure
                     e.printStackTrace();
                     showErrMsg("Failed to fetch data from Firestore");
                 }
@@ -126,10 +131,8 @@ public class FavoritesFragment extends Fragment implements FavMealView {
         }
     }
 
-    // Method to fetch data from Room (Local)
     private void fetchLocalData() {
         FavPresenterImpl favPresenter = new FavPresenterImpl(this, MealsRepositoryImol.getInstance(remoteDataSource, localDataSource));
-        showLoader();
         showData(favPresenter.getMeals());
     }
 
@@ -149,7 +152,12 @@ public class FavoritesFragment extends Fragment implements FavMealView {
                                 .subscribe(text -> {
                                     filterType(text, mealList);
                                 });
-                        hideLoader();
+                        if (isDatasetEmpty()) {
+                            showLoader();
+                        } else {
+                            hideLoader();
+                            favAdapter.notifyDataSetChanged();
+                        }
                     }
                     @Override
                     public void onError(Throwable t) {
@@ -177,15 +185,30 @@ public class FavoritesFragment extends Fragment implements FavMealView {
                     favAdapter.notifyDataSetChanged();
                 });
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        favAdapter.notifyDataSetChanged();
+        if (isDatasetEmpty()) {
+            showLoader();
+        } else {
+            hideLoader();
+            favAdapter.notifyDataSetChanged();
+        }
+    }
     private void showLoader() {
-        loader.setVisibility(View.VISIBLE);
+        backgroundAnimationView.setVisibility(View.VISIBLE);
     }
 
     private void hideLoader() {
-        loader.setVisibility(View.GONE);
+        backgroundAnimationView.setVisibility(View.GONE);
     }
-
+    private boolean isDatasetEmpty() {
+        if (favAdapter != null) {
+            return favAdapter.getItemCount() == 0;
+        }
+        return true;
+    }
     public void getFavoriteMealsFromFirestore(String userId, OnMealsLoadedListener listener) {
         CollectionReference favoriteMealsRef = FirebaseFirestore.getInstance()
                 .collection("users")

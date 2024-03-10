@@ -1,8 +1,13 @@
 package com.example.foodzarella.allMeals.view;
 
+import static android.app.PendingIntent.getActivity;
+import static androidx.core.content.ContentProviderCompat.requireContext;
+import static androidx.core.content.ContextCompat.startActivity;
 import static com.example.foodzarella.SnackbarUtils.showSnackbar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -18,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.foodzarella.HomeActivity;
+import com.example.foodzarella.MainActivity;
 import com.example.foodzarella.R;
 import com.example.foodzarella.db.MealsLocalDataSource;
 import com.example.foodzarella.mealDetails.view.MealDetailsActivity;
@@ -77,33 +84,63 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         userId = currentUser.getUid();
+
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isFavorite) {
-                    removeMealFromFavorites(userId, meal, holder);
-                    showSnackbar(context, v, "Meal removed from favorites");
-                } else {
-                    addMealToFavorites(userId, meal, holder);
-                    showSnackbar(context, v, "Meal added to favorites");
-                }
-                isFavorite = !isFavorite;
-            }
-        });
-        if (isNetworkAvailable()) {
-            checkFavoriteMealExistenceForUser(userId, meal, new OnFavoriteMealExistenceCheckedListener() {
-                        @Override
-                        public void onFavoriteMealExistenceChecked(boolean mealExists) {
-                            if (mealExists) {
-                                holder.add.setImageResource(R.drawable.ic_favorite_on);
-                                isFavorite = true;
-                            } else {
-                                holder.add.setImageResource(R.drawable.ic_favorite_off);
+                if (!currentUser.isAnonymous()) {
+                    if (isFavorite) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setMessage("Are you sure you want to remove this meal from favorites?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                removeMealFromFavorites(userId, meal, holder);
+                                showSnackbar(context, v, "Meal removed from favorites");
                                 isFavorite = false;
                             }
-                        }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                    } else {
+                        addMealToFavorites(userId, meal, holder);
+                        showSnackbar(context, v, "Meal added to favorites");
+                        isFavorite = true;
                     }
-            );
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("You need to sign in to add meals to favorites. Do you want to sign in?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(context, MainActivity.class);
+                            context.startActivity(intent);
+                            mAuth.signOut();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                }
+            }
+        });
+
+        if (isNetworkAvailable()) {
+            checkFavoriteMealExistenceForUser(userId, meal, new OnFavoriteMealExistenceCheckedListener() {
+                @Override
+                public void onFavoriteMealExistenceChecked(boolean mealExists) {
+                    if (mealExists) {
+                        holder.add.setImageResource(R.drawable.ic_favorite_on);
+                        isFavorite = true;
+                    } else {
+                        holder.add.setImageResource(R.drawable.ic_favorite_off);
+                        isFavorite = false;
+                    }
+                }
+            });
         } else {
             fetchLocalData(meal, holder);
         }
@@ -111,16 +148,33 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
         holder.MealPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DayMeal dayMeal = new DayMeal(meal.getStrMeal(), meal.getStrMealThumb(), meal.getIdMeal(), "");
-                Gson gson = new Gson();
-                String mealJson = gson.toJson(dayMeal);
-                SharedPreferences sharedPreferences = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("meal", mealJson);
-                editor.apply();
-                NavController navController = Navigation.findNavController(v);
-                navController.popBackStack();
-                navController.navigate(R.id.navigation_meal_plan);
+                if (!currentUser.isAnonymous()) {
+                    DayMeal dayMeal = new DayMeal(meal.getStrMeal(), meal.getStrMealThumb(), meal.getIdMeal(), "");
+                    Gson gson = new Gson();
+                    String mealJson = gson.toJson(dayMeal);
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("meal", mealJson);
+                    editor.apply();
+                    NavController navController = Navigation.findNavController(v);
+                    navController.popBackStack();
+                    navController.navigate(R.id.navigation_meal_plan);
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("You need to sign in to add meals to calender. Do you want to sign in?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(context, MainActivity.class);
+                            context.startActivity(intent);
+                            mAuth.signOut();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                }
             }
         });
         String url = meal.getStrMealThumb();
@@ -155,12 +209,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
 
 
     public void addMealToFavorites(String userId, Meal meal, ViewHolderMeals ViewHolderMeals) {
-        Query query = FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(userId)
-                .collection("favoriteMeals")
-                .whereEqualTo("idMeal", meal.getIdMeal())
-                .limit(1);
+        Query query = FirebaseFirestore.getInstance().collection("users").document(userId).collection("favoriteMeals").whereEqualTo("idMeal", meal.getIdMeal()).limit(1);
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
@@ -186,12 +235,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     }
 
     public void removeMealFromFavorites(String userId, Meal meal, ViewHolderMeals ViewHolderMeals) {
-        Query query = FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(userId)
-                .collection("favoriteMeals")
-                .whereEqualTo("idMeal", meal.getIdMeal())
-                .limit(1); // Limit to 1 document since we only need to find one
+        Query query = FirebaseFirestore.getInstance().collection("users").document(userId).collection("favoriteMeals").whereEqualTo("idMeal", meal.getIdMeal()).limit(1); // Limit to 1 document since we only need to find one
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
@@ -224,12 +268,7 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     }
 
     public void checkFavoriteMealExistenceForUser(String userId, Meal meal, OnFavoriteMealExistenceCheckedListener listener) {
-        Query query = FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(userId)
-                .collection("favoriteMeals")
-                .whereEqualTo("idMeal", meal.getIdMeal())
-                .limit(1); // Limit to 1 document since we only need to check existence
+        Query query = FirebaseFirestore.getInstance().collection("users").document(userId).collection("favoriteMeals").whereEqualTo("idMeal", meal.getIdMeal()).limit(1); // Limit to 1 document since we only need to check existence
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -242,30 +281,28 @@ public class MealAdapter extends RecyclerView.Adapter<ViewHolderMeals> {
     }
 
     private void fetchLocalData(Meal meal, ViewHolderMeals viewHolderMeals) {
-        mealsLocalDataSource.isMealExists(meal.getIdMeal())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSubscriber<Boolean>() {
-                    @Override
-                    public void onNext(Boolean exists) {
-                        if (exists) {
-                            viewHolderMeals.add.setImageResource(R.drawable.ic_favorite_on);
-                            isFavorite = true;
-                        } else {
-                            viewHolderMeals.add.setImageResource(R.drawable.ic_favorite_off);
-                            isFavorite = false;
-                        }
-                    }
-                    @Override
-                    public void onError(Throwable t) {
+        mealsLocalDataSource.isMealExists(meal.getIdMeal()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableSubscriber<Boolean>() {
+            @Override
+            public void onNext(Boolean exists) {
+                if (exists) {
+                    viewHolderMeals.add.setImageResource(R.drawable.ic_favorite_on);
+                    isFavorite = true;
+                } else {
+                    viewHolderMeals.add.setImageResource(R.drawable.ic_favorite_off);
+                    isFavorite = false;
+                }
+            }
 
-                    }
+            @Override
+            public void onError(Throwable t) {
 
-                    @Override
-                    public void onComplete() {
-                        // Not needed for Flowable, can be left empty
-                    }
-                });
+            }
+
+            @Override
+            public void onComplete() {
+                // Not needed for Flowable, can be left empty
+            }
+        });
     }
 
     public interface OnFavoriteMealExistenceCheckedListener {

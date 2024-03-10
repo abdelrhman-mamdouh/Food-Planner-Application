@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodzarella.R;
 import com.example.foodzarella.SnackbarUtils;
 import com.example.foodzarella.dayMeal.presenter.DayMealsPresenter;
@@ -60,7 +61,7 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
     private Button nextWeekButton;
     private Button newEventAction;
     private Button addAnotherMeal;
-
+    LottieAnimationView backgroundAnimationView;
     DayMealAdapter dayMealAdapter;
 
     private MealsLocalDataSource localDataSource;
@@ -93,6 +94,7 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
     }
 
     private void initWidgets(View view) {
+        backgroundAnimationView = view.findViewById(R.id.loaderss);
         calendarRecyclerView = view.findViewById(R.id.calendarRecyclerView);
         monthYearText = view.findViewById(R.id.monthYearTV);
         eventRecyclerView = view.findViewById(R.id.eventListView);
@@ -199,8 +201,13 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
                 public void onMealsLoaded(List<DayMeal> meals) {
                     dayMealAdapter.setList(meals);
                     dayMealAdapter.notifyDataSetChanged();
+                    if (isDatasetEmpty()) {
+                        showLoader();
+                    } else {
+                        hideLoader();
+                        dayMealAdapter.notifyDataSetChanged();
+                    }
                 }
-
                 @Override
                 public void onFailure(Exception e) {
                     e.printStackTrace();
@@ -214,6 +221,12 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
         void onMealsLoaded(List<DayMeal> meals);
 
         void onFailure(Exception e);
+    }
+    private boolean isDatasetEmpty() {
+        if (dayMealAdapter != null) {
+            return dayMealAdapter.getItemCount() == 0;
+        }
+        return true;
     }
 
     public void getDayMealsFromFirestore(String userId, OnMealsLoadedListeners listener) {
@@ -288,13 +301,20 @@ public class MealPlanFragment extends Fragment implements CalendarAdapter.OnItem
                         mealList -> {
                             dayMealAdapter.setList(mealList);
                             dayMealAdapter.notifyDataSetChanged();
+                            hideLoader();
                         },
                         throwable -> {
                             showErrMsg(throwable.getMessage());
                         }
                 );
     }
+    private void showLoader() {
+        backgroundAnimationView.setVisibility(View.VISIBLE);
+    }
 
+    private void hideLoader() {
+        backgroundAnimationView.setVisibility(View.GONE);
+    }
 
     @Override
     public void showErrMsg(String error) {
